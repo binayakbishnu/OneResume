@@ -4,8 +4,8 @@ import {
 } from 'react-router-dom'
 
 import AuthPage from './Authentication/AuthPage'
-import LoginPage from './Authentication/LoginPage'
-import SignupPage from './Authentication/SignupPage'
+import LoginPage from './Components/Auth/LoginCard'
+import SignupPage from './Components/Auth/SignupCard'
 import HomePage from './Pages/HomePage'
 
 import './App.css';
