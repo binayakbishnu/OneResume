@@ -16,14 +16,14 @@ export function LogoutLink({style}) {
     }
     return (
         <button className={style} onClick={submitLogout}>
-            Log out <span aria-hidden="true">&rarr;</span>
+            Log out{/*  <span aria-hidden="true">&rarr;</span> */}
         </button>
     )
 }
-export function SignupLink({style}) {
-    return (
-        <a href="/signup" className={style}>
-            Log in <span aria-hidden="true">&rarr;</span>
-        </a>
-    )
-}
+// export function SignupLink({style}) {
+//     return (
+//         <a href="/signup" className={style}>
+//             Log in <span aria-hidden="true">&rarr;</span>
+//         </a>
+//     )
+// }

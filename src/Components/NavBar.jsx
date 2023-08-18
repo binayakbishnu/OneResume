@@ -10,6 +10,8 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+import { BsFillPersonFill } from 'react-icons/bs'
+// import { BiTargetLock } from 'react-icons/bi'
 
 import { LoginLink, LogoutLink, SignupLink } from './Auth/CommonLinks'
 
@@ -21,8 +23,8 @@ const aboutDetails = [
     { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
 ]
 const callsToAction = [
-    { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-    { name: 'Contact sales', href: '#', icon: PhoneIcon },
+    { name: 'Watch demo', href: '/about/demo', icon: PlayCircleIcon },
+    { name: 'Contact us', href: '/about#contact', icon: PhoneIcon },
 ]
 
 function classNames(...classes) {
@@ -73,13 +75,29 @@ export default function NavBar({ type, email }) {
                         >
                             <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-[#191919] shadow-lg ring-1 ring-gray-900/5">
                                 <div className="p-4">
-                                    {aboutDetails.map((item) => (
+                                    <div
+                                        className="group relative flex items-start gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-[#202020]"
+                                    >
+                                        {/* <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-[#202020] group-hover:bg-[#191919]">
+                                            <BiTargetLock className="h-6 w-6 text-gray-600" aria-hidden="true" />
+                                        </div> */}
+                                        <div className="flex-auto">
+                                            <a href="/about" className="block font-semibold">
+                                                Aim
+                                                <span className="absolute inset-0" />
+                                            </a>
+                                            <p className="mt-1 text-gray-600">
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quod iste qui repudiandae soluta vero, vitae culpa blanditiis tempore perferendis nam fugit similique recusandae fuga earum debitis. A, similique sapiente.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {/* {aboutDetails.map((item) => (
                                         <div
                                             key={item.name}
-                                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-[#202020]"
                                         >
-                                            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                                <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                                            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-[#202020] group-hover:bg-[#191919]">
+                                                <item.icon className="h-6 w-6 text-gray-600" aria-hidden="true" />
                                             </div>
                                             <div className="flex-auto">
                                                 <a href={item.href} className="block font-semibold">
@@ -89,7 +107,7 @@ export default function NavBar({ type, email }) {
                                                 <p className="mt-1 text-gray-600">{item.description}</p>
                                             </div>
                                         </div>
-                                    ))}
+                                    ))} */}
                                 </div>
 
                                 <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-[#202020]">
@@ -97,7 +115,7 @@ export default function NavBar({ type, email }) {
                                         <a
                                             key={item.name}
                                             href={item.href}
-                                            className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 hover:bg-gray-100"
+                                            className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 hover:bg-[#222222]"
                                         >
                                             <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                                             {item.name}
@@ -121,19 +139,58 @@ export default function NavBar({ type, email }) {
                 {
                     type === "loggedin" &&
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <LogoutLink style="text-sm font-semibold leading-6" />
+                        <Popover className="relative">
+                            <Popover.Button className="flex items-center gap-x-1 text-sm leading-6">
+                                {email}
+                                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                            </Popover.Button>
+                            <Transition
+                                as={Fragment}
+                                enter="transition ease-out duration-200"
+                                enterFrom="opacity-0 translate-y-1"
+                                enterTo="opacity-100 translate-y-0"
+                                leave="transition ease-in duration-150"
+                                leaveFrom="opacity-100 translate-y-0"
+                                leaveTo="opacity-0 translate-y-1"
+                            >
+                                <Popover.Panel className="absolute right-0 top-full z-10 mt-3 w-screen max-w-[25vw] overflow-hidden rounded-3xl bg-[#191919] shadow-lg ring-1 ring-gray-900/5">
+                                    <div className="p-4">
+                                        <div
+                                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-[#202020]"
+                                        >
+                                            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-[#202020] group-hover:bg-[#191919]">
+                                                <BsFillPersonFill className="h-6 w-6 text-gray-600" aria-hidden="true" />
+                                            </div>
+                                            <div className="flex-auto">
+                                                <a href="/profile" className="block font-semibold">
+                                                    Profile
+                                                    <span className="absolute inset-0" />
+                                                </a>
+                                                <p className="mt-1 text-gray-600">Edit profile</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 divide-x divide-gray-900/5 bg-[#202020]">
+                                        <LogoutLink style="rounded-es-3xl flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 hover:bg-[#222222]" />
+                                    </div>
+                                </Popover.Panel>
+                            </Transition>
+                        </Popover>
+                        {/* <LogoutLink style="text-sm font-semibold leading-6" /> */}
                     </div>
                 }
                 {
                     type === "loggedout" &&
-                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end text-[rgba(0,0,0,0)]">
                         <LoginLink style="text-sm font-semibold leading-6" />
                     </div>
                 }
             </nav>
             <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
                 <div className="fixed inset-0 z-10" />
-                <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+                <Dialog.Panel
+                    className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-[#191919] text-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
                         <a href="#" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
@@ -157,14 +214,14 @@ export default function NavBar({ type, email }) {
                             <div className="space-y-2 py-6">
                                 <a
                                     href="/"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Home
                                 </a>
                                 <Disclosure as="div" className="-mx-3">
                                     {({ open }) => (
                                         <>
-                                            <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50">
+                                            <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7">
                                                 About
                                                 <ChevronDownIcon
                                                     className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
@@ -172,12 +229,19 @@ export default function NavBar({ type, email }) {
                                                 />
                                             </Disclosure.Button>
                                             <Disclosure.Panel className="mt-2 space-y-2">
-                                                {[...aboutDetails, ...callsToAction].map((item) => (
+                                                <Disclosure.Button
+                                                    as="a"
+                                                    href="/about"
+                                                    className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7"
+                                                >
+                                                    Aim
+                                                </Disclosure.Button>
+                                                {[/* ...aboutDetails, */ ...callsToAction].map((item) => (
                                                     <Disclosure.Button
                                                         key={item.name}
                                                         as="a"
                                                         href={item.href}
-                                                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 hover:bg-gray-50"
+                                                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7"
                                                     >
                                                         {item.name}
                                                     </Disclosure.Button>
@@ -188,29 +252,44 @@ export default function NavBar({ type, email }) {
                                 </Disclosure>
                                 {/* <a
                                     href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Features
                                 </a>
                                 <a
                                     href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Marketplace
                                 </a>
                                 <a
                                     href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Company
                                 </a> */}
+                                {
+                                    type === "loggedin" &&
+                                    <a
+                                        href="/"
+                                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
+                                    >
+                                        Profile
+                                    </a>
+                                }
                             </div>
-                            <div className="py-6">
-                                <LogoutLink style="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50" />
-                            </div>
-                            <div className="py-6">
-                                <LoginLink style="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50" />
-                            </div>
+                            {
+                                type === "loggedin" &&
+                                <div className="py-6">
+                                    <LogoutLink style="w-full bg-[#202020] block rounded-lg px-3 py-2.5 text-base font-semibold leading-7" />
+                                </div>
+                            }
+                            {
+                                type === "loggedout" &&
+                                <div className="py-6">
+                                    <LoginLink style="w-full bg-[#202020] block rounded-lg px-3 py-2.5 text-base font-semibold leading-7" />
+                                </div>
+                            }
                         </div>
                     </div>
                 </Dialog.Panel>
