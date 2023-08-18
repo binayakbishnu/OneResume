@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 
-import { LoginLink, SignupLink } from './Auth/CommonLinks'
+import { LoginLink, LogoutLink, SignupLink } from './Auth/CommonLinks'
 
 const aboutDetails = [
     { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
@@ -29,8 +29,8 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function NavBar() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+export default function NavBar({ type, email }) {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
         <header className="bg-none text-white">
@@ -118,9 +118,18 @@ export default function NavBar() {
                         Company
                     </a> */}
                 </Popover.Group>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <LoginLink style="text-sm font-semibold leading-6" />
-                </div>
+                {
+                    type === "loggedin" &&
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                        <LogoutLink style="text-sm font-semibold leading-6" />
+                    </div>
+                }
+                {
+                    type === "loggedout" &&
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                        <LoginLink style="text-sm font-semibold leading-6" />
+                    </div>
+                }
             </nav>
             <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
                 <div className="fixed inset-0 z-10" />
@@ -195,6 +204,9 @@ export default function NavBar() {
                                 >
                                     Company
                                 </a> */}
+                            </div>
+                            <div className="py-6">
+                                <LogoutLink style="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50" />
                             </div>
                             <div className="py-6">
                                 <LoginLink style="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50" />

@@ -6,7 +6,7 @@ import NavBar from '../Components/NavBar'
 function AuthPage() {
     return (
         <div className='flex flex-col h-[100vh]'>
-            <NavBar type={"loggedout"} />
+            <NavBar type={"loggedout"} email={""} />
             <div className='AuthPageMain flex-1 flex flex-col lg:flex-row items-start lg:justify-between gap-6 lg:gap-0 px-5 lg:mt-[2%]'>
                 <h1 className='text-6xl lg:text-8xl font-bold text-white'>One<br />Resume</h1>
                 <div className="lg:mr-[5%] w-[100%] lg:w-[30%] h-auto lg:h-auto text-white flex flex-col items-stretch justify-between">
