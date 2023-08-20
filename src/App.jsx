@@ -3,13 +3,15 @@ import {
   Routes, Route
 } from 'react-router-dom'
 
+import './App.css';
+
 import AuthPage from './Authentication/AuthPage'
 import LoginPage from './Components/Auth/LoginCard'
 import SignupPage from './Components/Auth/SignupCard'
 import PwdReset from './Components/Auth/PwdReset'
 import HomePage from './Pages/HomePage'
-
-import './App.css';
+import Profile from './Pages/Profile'
+import Wrapper from './Pages/Wrapper';
 
 function App() {
   return (
@@ -23,8 +25,9 @@ function App() {
 
             <Route path="/forgotpassword" element={<PwdReset />} />
           </Route>
-          <Route path="/home" element={<HomePage />}>
-            {/* <Route path="" element={} /> */}
+          <Route path="/home" element={<Wrapper />}>
+            <Route path="" element={<HomePage />} />
+          <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
       </Router>

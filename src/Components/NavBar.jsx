@@ -162,7 +162,7 @@ export default function NavBar({ type, email }) {
                                                 <BsFillPersonFill className="h-6 w-6 text-gray-600" aria-hidden="true" />
                                             </div>
                                             <div className="flex-auto">
-                                                <a href="/profile" className="block font-semibold">
+                                                <a href={type == "loggedin" ? "/home/profile" : "/"} className="block font-semibold">
                                                     Profile
                                                     <span className="absolute inset-0" />
                                                 </a>
@@ -271,7 +271,7 @@ export default function NavBar({ type, email }) {
                                 {
                                     type === "loggedin" &&
                                     <a
-                                        href="/"
+                                        href={type == "loggedin" ? "/home/profile" : "/"}
                                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                     >
                                         Profile

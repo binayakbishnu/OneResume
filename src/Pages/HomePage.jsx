@@ -10,13 +10,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 function HomePage() {
     const [user, loading, error] = useAuthState(auth);
     // const [name, setName] = useState("");
-    const navigate = useNavigate();
-    const fetchUserName = async () => {
+    const [email, setEmail] = useState("");
+    const fetchUserData = async () => {
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
             const doc = await getDocs(q);
             const data = doc.docs[0].data();
             // setName(data.name);
+            setEmail(data.email);
         } catch (err) {
             console.error(err);
             alert("An error occured while fetching user data");
@@ -37,22 +38,23 @@ function HomePage() {
         setFile(e.target.files[0]);
         // localStorage.setItem(user?.uid, JSON.stringify(file));
     }
-
+    
     const viewFileTrigger = () => {
         // alert(JSON.parse(localStorage.getItem(user?.uid)));
     }
 
+    const navigate = useNavigate();
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
-        fetchUserName();
+        fetchUserData();
 
         // localStorage.setItem(user?.uid, JSON.stringify(file));
         // setUrl(localStorage.getItem('recent-image'));
     }, [user, loading /* , file */]);
     return (
-        <div className='text-white flex flex-col h-[100vh]'>
-            <NavBar type={"loggedin"} email={user?.email} />
+        <div className='text-white flex flex-col flex-1'>
+            {/* <NavBar type={"loggedin"} email={user?.email} /> */}
 
             <input ref={fileUploadRef} type="file"
                 className="hidden w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
