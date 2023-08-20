@@ -54,7 +54,7 @@ export default function NavBar({ type, email }) {
                     </button>
                 </div>
                 <Popover.Group className="hidden lg:flex lg:gap-x-12">
-                    <a href="/" className="text-sm font-semibold leading-6">
+                    <a href={type == "loggedin" ? "/home" : "/"} className="text-sm font-semibold leading-6">
                         Home
                     </a>
 
@@ -213,7 +213,7 @@ export default function NavBar({ type, email }) {
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 <a
-                                    href="/"
+                                    href={type == "loggedin" ? "/home" : "/"}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Home
