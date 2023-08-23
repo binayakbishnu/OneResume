@@ -60,7 +60,8 @@ function LoginCard() {
                         Password
                     </label>
                     <input type="password"
-                        placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        // placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        placeholder='••••••••'
                         onFocus={(e) => e.target.placeholder = ""}
                         onBlur={(e) => e.target.placeholder = "••••••••"}
                         value={password}
@@ -68,6 +69,7 @@ function LoginCard() {
                         className='w-[100%] mx-auto px-5 py-2 rounded bg-[rgba(0,0,0,0)] border boder-white text-gray-500'
                     />
                 </div>
+                <Link to="/forgotpassword" className='underline w-fit'>Forgot Password?</Link>
 
                 <div className='flex flex-row gap-2'>
                     <input type="checkbox" />
@@ -77,7 +79,6 @@ function LoginCard() {
                 <button onClick={submitLogin} type="button" className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
             </form>
 
-            <Link to="/forgotpassword" className='underline'>Forgot Password</Link>
 
         </div>
     )

@@ -27,7 +27,7 @@ function SignupCard() {
             return;
         }
         if (user) navigate("/home");
-    }, [user, loading]);useEffect(() => {
+    }, [user, loading]); useEffect(() => {
         if (loading) return;
         if (user) navigate("/home");
     }, [user, loading]);
@@ -71,7 +71,8 @@ function SignupCard() {
                         Password
                     </label>
                     <input type="password"
-                        placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        // placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        placeholder='••••••••'
                         onFocus={(e) => e.target.placeholder = ""}
                         onBlur={(e) => e.target.placeholder = '••••••••'}
                         value={password}
@@ -84,17 +85,18 @@ function SignupCard() {
                         Confirm password
                     </label>
                     <input type="password"
-                        placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        // placeholder='&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'
+                        placeholder='••••••••'
                         onFocus={(e) => e.target.placeholder = ""}
                         onBlur={(e) => e.target.placeholder = '••••••••'}
                         className='w-[100%] mx-auto px-5 py-2 rounded bg-[rgba(0,0,0,0)] border boder-white text-gray-500'
                     />
                 </div>
 
-                <div className='flex flex-row gap-2'>
+                {/* <div className='flex flex-row gap-2'>
                     <input type="checkbox" />
                     <label htmlFor="">Remember me</label>
-                </div>
+                </div> */}
 
                 <button onClick={submitSignup} type="button" className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
             </form>
