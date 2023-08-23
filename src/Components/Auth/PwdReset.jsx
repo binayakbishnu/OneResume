@@ -42,6 +42,8 @@ function PwdReset() {
                     />
                 </div>
 
+                <Link to="/login" className='underline w-fit'>Go back</Link>
+
                 <button onClick={submitReset} type="button" className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
             </form>
         </div>
