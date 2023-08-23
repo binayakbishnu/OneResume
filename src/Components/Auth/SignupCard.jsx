@@ -18,10 +18,38 @@ function SignupCard() {
         console.log('google signup');
         signInWithGoogle();
     }
-    const submitSignup = () => {
-        if (emailValid && passwordValid && confirmPasswordValid) {
-            console.log('submit signup');
-            registerWithEmailAndPassword(/* name,  */email, password);
+    const submitSignup = async () => {
+        if (email === "") {
+            setEmailValid(false);
+            setEmailError("Enter email");
+        }
+        else if (password === "") {
+            setPasswordValid(false);
+            setPasswordError("Enter password");
+        }
+        else if (confirmPassword === "") {
+            setConfirmPasswordValid(false);
+            setConfirmPasswordError("Enter confirm password");
+        }
+        else if (emailValid && passwordValid && confirmPasswordValid) {
+            const submitError = await registerWithEmailAndPassword(/* name,  */email, password);
+            console.warn(submitError);
+            if (submitError != "") {
+                setEmailValid(false);
+                setEmailError("Email ID already exists");
+            }
+            // else if(submitError != ""){
+            //     setEmailValid(false);
+            //     setEmailError("Check email");
+            // }
+        }
+        else if (emailError === "Email ID already exists") {
+            const submitError = registerWithEmailAndPassword(/* name,  */email, password);
+            // console.warn(submitError);
+            if (submitError != "") {
+                setEmailValid(false);
+                setEmailError("Email ID already exists");
+            }
         }
         else {
             alert("Invalid fields");
@@ -50,38 +78,78 @@ function SignupCard() {
 
     const [passwordValid, setPasswordValid] = useState(true);
     const [passwordError, setPasswordError] = useState("no error");
+    const [lowerFulfilled, setLowerFulfilled] = useState(false);
+    const [upperFulfilled, setUpperFulfilled] = useState(false);
+    const [numberFulfilled, setNumberFulfilled] = useState(false);
+    const [specialFulfilled, setSpecialFulfilled] = useState(false);
+    const [countFulfilled, setCountFulfilled] = useState(false);
     const validatePassword = () => {
         if (password == "") {
             setPasswordValid(true);
             setPasswordError("no error");
-            return true;
+            // return true;
         }
-        else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/.test(password)) {
+        if (/(?=.*[a-z])/.test(password)) {
+            setLowerFulfilled(true);
+        }
+        else {
+            setLowerFulfilled(false);
+        }
+
+        if (/(?=.*[A-Z])/.test(password)) {
+            setUpperFulfilled(true);
+        }
+        else {
+            setUpperFulfilled(false);
+        }
+
+        if (/(?=.*\d)/.test(password)) {
+            setNumberFulfilled(true);
+        }
+        else {
+            setNumberFulfilled(false);
+        }
+
+        if (/(?=.*[@#$!%*?&])/.test(password)) {
+            setSpecialFulfilled(true);
+        }
+        else {
+            setSpecialFulfilled(false);
+        }
+
+        if (/.{8,}/.test(password)) {
+            setCountFulfilled(true);
+        }
+        else {
+            setCountFulfilled(false);
+        }
+
+        if ((password != "") && (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/.test(password))) {
             setPasswordValid(true);
             setPasswordError("no error");
             return true;
         }
-        else {
-            setPasswordValid(false);
-            setPasswordError("Invalid password");
-            return false;
-        }
+        // else {
+        //     setPasswordValid(false);
+        //     setPasswordError("Invalid password");
+        //     return false;
+        // }
     }
 
     const [confirmPasswordValid, setConfirmPasswordValid] = useState(true);
     const [confirmPasswordError, setConfirmPasswordError] = useState("no error");
     const validateConfirmPassword = () => {
-        if (confirmPassword == "") {
+        /* if (confirmPassword == "") {
             setConfirmPasswordValid(true);
             setConfirmPasswordError("no error");
             return true;
         }
-        else if ((confirmPassword === password) && (passwordValid)) {
+        else */ if ((confirmPassword === password) && (passwordValid)) {
             setConfirmPasswordValid(true);
             setConfirmPasswordError("no error");
             return true;
         }
-        else {
+        else if ((confirmPassword === password) && (passwordValid) && (confirmPassword != "")) {
             setConfirmPasswordValid(false);
             setConfirmPasswordError("Passwords don't match");
             return false;
@@ -100,7 +168,7 @@ function SignupCard() {
     }, [user, loading, email, password, confirmPassword]);
 
     return (
-        <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-10'>
+        <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-6'>
             <button onClick={googleSignup} className='lg:mb-4 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
                 <AiOutlineGoogle className='text-2xl' />
                 Google login
@@ -136,7 +204,7 @@ function SignupCard() {
                         {/* <BsCheckCircleFill className={`${emailValid ? 'text-green-500' : 'text-red-500'}`} /> */}
                         <AiFillCheckCircle className={`${emailValid ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
-                    <p className={`p-0 m-0 text-[0.8em] ${emailValid || email === "" ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{emailError}</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${emailValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{emailError}</p>
                 </div>
 
                 <div className='relative'>
@@ -155,7 +223,13 @@ function SignupCard() {
                         />
                         <AiFillCheckCircle className={`${passwordValid ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
-                    <p className={`p-0 m-0 text-[0.8em] ${(passwordValid || password === "") ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{passwordError}</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${lowerFulfilled ? 'text-green-500' : 'text-red-500'}`}>Atleast one lowercase</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${upperFulfilled ? 'text-green-500' : 'text-red-500'}`}>Atleast one uppercase</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${numberFulfilled ? 'text-green-500' : 'text-red-500'}`}>Atleast one number</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${specialFulfilled ? 'text-green-500' : 'text-red-500'}`}>Atleast one special character</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${countFulfilled ? 'text-green-500' : 'text-red-500'}`}>Minimum 8 characters</p>
+
+                    {/* <p className={`p-0 m-0 text-[0.8em] ${passwordValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{passwordError}</p> */}
                 </div>
 
                 <div className='relative'>
@@ -174,7 +248,7 @@ function SignupCard() {
                         />
                         <AiFillCheckCircle className={`${confirmPasswordValid ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
-                    <p className={`p-0 m-0 text-[0.8em] ${(confirmPasswordValid || confirmPassword === "") ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{confirmPasswordError}</p>
+                    <p className={`p-0 m-0 text-[0.8em] ${confirmPasswordValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{confirmPasswordError}</p>
                 </div>
 
                 {/* <div className='flex flex-row gap-2'>

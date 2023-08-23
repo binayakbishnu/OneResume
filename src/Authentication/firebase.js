@@ -56,13 +56,18 @@ const signInWithGoogle = async () => {
 const logInWithEmailAndPassword = async (email, password) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
+        return "";
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         if (err.message === "Firebase: Error (auth/user-not-found).") {
-            alert("User not found");
+            return "User not found";
         }
-        else
+        else if(err.message === "Firebase: Error (auth/wrong-password)."){
+            return "Please check your password";
+        }
+        else {
             alert(err.message);
+        }
     }
 };
 
@@ -76,9 +81,16 @@ const registerWithEmailAndPassword = async (/* name, */ email, password) => {
             authProvider: "local",
             email,
         });
+        return "";
     } catch (err) {
-        console.error(err);
-        alert(err.message);
+        if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+            // alert("Email ID already exists")
+            return "Email ID already exists";
+        }
+        else {
+            alert(err.message);
+            return err.message;
+        }
     }
 };
 
