@@ -41,7 +41,7 @@ function LoginCard() {
                 <span className='bg-[#191919] px-[4px]'>OR</span>
             </h2> */}
 
-            <form className='flex flex-col gap-5'>
+            <form className='flex flex-col'>
                 <div className='relative'>
                     <label htmlFor="" className='absolute top-[-0.8rem] left-[1rem] z-1 text-white py-0 px-[5px] bg-[#191919]'>
                         Email
@@ -55,7 +55,7 @@ function LoginCard() {
                         className='w-[100%] mx-auto px-5 py-2 rounded bg-[rgba(0,0,0,0)] border boder-white text-gray-500'
                     />
                 </div>
-                <div className='relative'>
+                <div className='relative mt-5'>
                     <label htmlFor="" className='absolute top-[-0.8rem] left-[1rem] z-1 text-white py-0 px-[5px] bg-[#191919]'>
                         Password
                     </label>
@@ -69,14 +69,14 @@ function LoginCard() {
                         className='w-[100%] mx-auto px-5 py-2 rounded bg-[rgba(0,0,0,0)] border boder-white text-gray-500'
                     />
                 </div>
-                <Link to="/forgotpassword" className='underline w-fit'>Forgot Password?</Link>
+                <Link to="/forgotpassword" className=' mt-2 underline w-fit'>Forgot Password?</Link>
 
-                <div className='flex flex-row gap-2'>
+                {/* <div className='flex flex-row gap-2'>
                     <input type="checkbox" />
                     <label htmlFor="">Remember me</label>
-                </div>
+                </div> */}
 
-                <button onClick={submitLogin} type="button" className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
+                <button onClick={submitLogin} type="button" className='mt-5 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
             </form>
 
 
