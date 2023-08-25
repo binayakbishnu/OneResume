@@ -43,16 +43,16 @@ function LoginCard() {
 
     const [loginEmailValid, setLoginEmailValid] = useState(true);
     const [loginEmailError, setLoginEmailError] = useState("no error");
-    const validateLoginEmail = () =>{
-        if(email != ""){
+    const validateLoginEmail = () => {
+        if (email !== "") {
             setLoginEmailValid(true);
         }
     }
 
     const [loginPasswordValid, setLoginPasswordValid] = useState(true);
     const [loginPasswordError, setLoginPasswordError] = useState("no error");
-    const validateLoginPassword = () =>{
-        if(password != ""){
+    const validateLoginPassword = () => {
+        if (password !== "") {
             setLoginPasswordValid(true);
         }
     }
@@ -62,6 +62,7 @@ function LoginCard() {
             // maybe trigger a loading screen
             return;
         }
+        if (error) return;
         if (user) navigate("/home");
 
         validateLoginEmail();

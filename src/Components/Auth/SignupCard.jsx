@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { /* Link, */ useNavigate } from 'react-router-dom'
 
 import { AiFillCheckCircle, AiOutlineGoogle } from 'react-icons/ai'
 
@@ -25,7 +25,7 @@ function SignupCard() {
         }
         else if (password === "") {
             setPasswordValid(false);
-            setPasswordError("Enter password");
+            // setPasswordError("Enter password");
         }
         else if (confirmPassword === "") {
             setConfirmPasswordValid(false);
@@ -34,11 +34,11 @@ function SignupCard() {
         else if (emailValid && passwordValid && confirmPasswordValid) {
             const submitError = await registerWithEmailAndPassword(/* name,  */email, password);
             console.warn(submitError);
-            if (submitError != "") {
+            if (submitError !== "") {
                 setEmailValid(false);
                 setEmailError("Email ID already exists");
             }
-            // else if(submitError != ""){
+            // else if(submitError !== ""){
             //     setEmailValid(false);
             //     setEmailError("Check email");
             // }
@@ -46,7 +46,7 @@ function SignupCard() {
         else if (emailError === "Email ID already exists") {
             const submitError = registerWithEmailAndPassword(/* name,  */email, password);
             // console.warn(submitError);
-            if (submitError != "") {
+            if (submitError !== "") {
                 setEmailValid(false);
                 setEmailError("Email ID already exists");
             }
@@ -59,7 +59,7 @@ function SignupCard() {
     const [emailValid, setEmailValid] = useState(true);
     const [emailError, setEmailError] = useState("no error");
     const validateEmail = () => {
-        if (email == "") {
+        if (email === "") {
             setEmailValid(true);
             setEmailError("no error");
             return true;
@@ -77,16 +77,16 @@ function SignupCard() {
     }
 
     const [passwordValid, setPasswordValid] = useState(true);
-    const [passwordError, setPasswordError] = useState("no error");
+    // const [passwordError, setPasswordError] = useState("no error");
     const [lowerFulfilled, setLowerFulfilled] = useState(false);
     const [upperFulfilled, setUpperFulfilled] = useState(false);
     const [numberFulfilled, setNumberFulfilled] = useState(false);
     const [specialFulfilled, setSpecialFulfilled] = useState(false);
     const [countFulfilled, setCountFulfilled] = useState(false);
     const validatePassword = () => {
-        if (password == "") {
+        if (password === "") {
             setPasswordValid(true);
-            setPasswordError("no error");
+            // setPasswordError("no error");
             // return true;
         }
         if (/(?=.*[a-z])/.test(password)) {
@@ -124,14 +124,14 @@ function SignupCard() {
             setCountFulfilled(false);
         }
 
-        if ((password != "") && (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/.test(password))) {
+        if ((password !== "") && (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/.test(password))) {
             setPasswordValid(true);
-            setPasswordError("no error");
+            // setPasswordError("no error");
             return true;
         }
         // else {
         //     setPasswordValid(false);
-        //     setPasswordError("Invalid password");
+        //    // setPasswordError("Invalid password");
         //     return false;
         // }
     }
@@ -149,7 +149,7 @@ function SignupCard() {
             setConfirmPasswordError("no error");
             return true;
         }
-        else if ((confirmPassword === password) && (passwordValid) && (confirmPassword != "")) {
+        else if ((confirmPassword === password) && (passwordValid) && (confirmPassword !== "")) {
             setConfirmPasswordValid(false);
             setConfirmPasswordError("Passwords don't match");
             return false;
@@ -161,7 +161,9 @@ function SignupCard() {
             // maybe trigger a loading screen
             return;
         }
+        if (error) return;
         if (user) navigate("/home");
+
         validateEmail();
         validatePassword();
         validateConfirmPassword();

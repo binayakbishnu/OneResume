@@ -9,7 +9,7 @@ function PwdReset() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
     const submitReset = () => {
-        
+
         if (!email) {
             alert("Please enter your email");
             return;
@@ -23,6 +23,7 @@ function PwdReset() {
             // maybe trigger a loading screen
             return;
         }
+        if (error) return;
         if (user) navigate("/home");
     }, [user, loading]);
     return (
