@@ -31,7 +31,7 @@ function Wrapper() {
 
         // localStorage.setItem(user?.uid, JSON.stringify(file));
         // setUrl(localStorage.getItem('recent-image'));
-    }, [user, loading /* , file */]);
+    }, /* [user, loading] */);
     return (
         <div className="h-[100vh] flex flex-col">
             <NavBar type={"loggedin"} email={user?.email} />
