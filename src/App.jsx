@@ -1,7 +1,9 @@
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes, Route
 } from 'react-router-dom'
+import { Suspense } from 'react';
 
 import './App.css';
 
@@ -10,8 +12,9 @@ import LoginPage from './Components/Auth/LoginCard'
 import SignupPage from './Components/Auth/SignupCard'
 import PwdReset from './Components/Auth/PwdReset'
 import HomePage from './Pages/HomePage'
-import Profile from './Pages/Profile'
+// import Profile from './Pages/Profile'
 import Wrapper from './Pages/Wrapper';
+const Profile = React.lazy(() => import('./Pages/Profile'));
 
 function App() {
   return (
@@ -27,7 +30,7 @@ function App() {
           </Route>
           <Route path="/home" element={<Wrapper />}>
             <Route path="" element={<HomePage />} />
-          <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Suspense><Profile /></Suspense>} />
           </Route>
         </Routes>
       </Router>
