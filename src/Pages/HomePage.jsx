@@ -7,6 +7,8 @@ import { auth, db } from "../Authentication/firebase";
 import { query, collection, getDocs, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import axios from "axios";
+
 function HomePage() {
     const [user, loading, error] = useAuthState(auth);
     // const [name, setName] = useState("");
@@ -30,15 +32,73 @@ function HomePage() {
     }
 
     const [file, setFile] = useState(null);
-    const fileUpload = (e) => {
+    const [name, setName] = useState(null);
+    const [uid, setUid] = useState(null);
+
+    const updateParams = async (uid_, name_, file_) => {
+        setUid(uid => uid_);
+        setName(name => name_);
+        setFile(file => file_);
+    }
+
+    const fileUpload = async (e) => {
         if (!e.target.files) {
             alert('File not uploaded');
             return;
         }
-        setFile(e.target.files[0]);
+        // setUid(user.uid);
+        // setName(e.target.files[0].name.split('.')[0]);
+        // setFile(e.target.files[0]);
+        let time = new Date().getSeconds();
+        await updateParams(
+            user.uid,
+            `${e.target.files[0].name.split('.')[0]}: ${time}`,
+            // `abc-${new Date().getSeconds()}`,
+            e.target.files[0]
+        );
+
         // localStorage.setItem(user?.uid, JSON.stringify(file));
+
+        // try {
+        //     await axios.post(`http://localhost:8000/uploadresume`, {
+        //         name: name,
+        //         uid: uid,
+        //         file: file,
+        //     })
+        //     console.log('frontend: pload triggered successfully');
+        // }
+        // catch (e) {
+        //     console.log(`frontend: ${e}`);
+        // }
     }
-    
+
+    const sendByAxios = async () => {
+        if (!file || !name) {
+            console.warn("no file to send");
+            return;
+        }
+        try {
+            await axios.post(`http://localhost:8000/uploadresume`, {
+                name: name,
+                uid: uid,
+                file: file,
+            }).then(res => {
+                alert(`${res.data === 'error' ? 'from backend: Backend error' : `uploaded`}`);
+                setUid(null);
+                setName(null);
+                setFile(null);
+                window.location.reload(false);
+            }).catch(e => {
+                console.log(`frontend: axios error: ${e}`)
+            }).finally(() => {
+                console.log('frontend: axios completed successfully');
+            })
+        }
+        catch (e) {
+            console.log(`frontend: ${e}`);
+        }
+    }
+
     const viewFileTrigger = () => {
         // alert(JSON.parse(localStorage.getItem(user?.uid)));
     }
@@ -51,7 +111,18 @@ function HomePage() {
 
         // localStorage.setItem(user?.uid, JSON.stringify(file));
         // setUrl(localStorage.getItem('recent-image'));
-    }, [user, loading /* , file */]);
+
+        // console.log(name);
+        sendByAxios();
+        // console.log(name);
+    }, [/* user, loading, */ /* name */ file]);
+
+    // TODO sendbyAxio will be called only when "file" changes
+    /* 
+        so cannot upload same file without page reload
+        tried using name as trigger for useEffect, updating it with date
+        not working, still dependent on file
+    */
     return (
         <div className='text-white flex flex-col flex-1'>
             {/* <NavBar type={"loggedin"} email={user?.email} /> */}
@@ -75,14 +146,26 @@ function HomePage() {
                     </label>
                 </div> */}
                 <div className="py-5 w-full flex flex-col md:flex-row items-center justify-between md:justify-center gap-2 md:gap-[2%]">
-                    <button className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-[60%] md:w-[30%] lg:w-[25%]" onClick={uploadButtonTrigger}>Upload resume</button>
+                    <button className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-[60%] md:w-[30%] lg:w-[25%]"
+                        onClick={uploadButtonTrigger}>Upload resume</button>
                     {/* <UploadFile userData={user} /> */}
+                    <form action="/viewresume" method="get"></form>
                     <button
                         className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-[60%] md:w-[30%] lg:w-[25%]"
                         onClick={viewFileTrigger}
                     >View resume</button>
                 </div>
-                <p className={file ? `text-white` : `text-[rgba(0,0,0,0)]`}>{file ? `${file.name}` : `file name`}</p>
+                <div className="flex flex-col items-center">
+                    <p className={file ? `text-white` : `text-[rgba(0,0,0,0)]`}>
+                        {file ? `${file.name}` : `file name`}
+                        <br />{name}<br />{uid}
+                    </p>
+                    {/* {file &&
+                        <form action="/uploadresume" method="post" className="w-full">
+                            <button type="submit" className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 w-full">Upload</button>
+                        </form>
+                    } */}
+                </div>
             </div>
 
 
