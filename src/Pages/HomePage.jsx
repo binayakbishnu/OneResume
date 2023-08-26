@@ -83,15 +83,22 @@ function HomePage() {
                 uid: uid,
                 file: file,
             }).then(res => {
-                alert(`${res.data === 'error' ? 'from backend: Backend error' : `uploaded`}`);
-                setUid(null);
-                setName(null);
-                setFile(null);
-                window.location.reload(false);
+                console.log(`${res.status != 200 ?
+                    `from backend: error:${res.data}` :
+                    `uploaded ${res.data.message}`}`);
+                // setUid(null);
+                // setName(null);
+                // setFile(null);
+                setReceivedFile(null);
+                setTimeout(() => {
+                    window.location.reload(false);
+                    // console.log('This will run after 1 second!')
+                }, 2000);
+
             }).catch(e => {
                 console.log(`frontend: axios error: ${e}`)
             }).finally(() => {
-                console.log('frontend: axios completed successfully');
+                console.log('frontend: axios completed');
             })
         }
         catch (e) {
@@ -99,8 +106,28 @@ function HomePage() {
         }
     }
 
-    const viewFileTrigger = () => {
+    const [receivedFile, setReceivedFile] = useState(null);
+    const viewFileTrigger = async () => {
         // alert(JSON.parse(localStorage.getItem(user?.uid)));
+        try {
+            await axios.get('http://localhost:8000/viewresume'
+            ).then(res => {
+                const responseData = res.data;
+                const name_ = responseData.name;
+                const time = responseData.time;
+                console.log(`${res.status != 200 ?
+                    `from backend: error:${res.data}` :
+                    `viewed ${name_}`}`);
+                setReceivedFile(responseData.file);
+                setFile(null);
+            }).catch(e => {
+                console.log(`frontend: axios error: ${e}`);
+            }).finally(() => {
+                console.log(`frontend: axios completed`);
+            })
+        } catch (e) {
+            console.log(`frontend: ${e}}`);
+        }
     }
 
     const navigate = useNavigate();
@@ -120,7 +147,7 @@ function HomePage() {
     // TODO sendbyAxio will be called only when "file" changes
     /* 
         so cannot upload same file without page reload
-        tried using name as trigger for useEffect, updating it with date
+        tried using name as trigger for useEffect, updating it with date to make it unique everytime
         not working, still dependent on file
     */
     return (
@@ -156,9 +183,22 @@ function HomePage() {
                     >View resume</button>
                 </div>
                 <div className="flex flex-col items-center">
-                    <p className={file ? `text-white` : `text-[rgba(0,0,0,0)]`}>
-                        {file ? `${file.name}` : `file name`}
-                        <br />{name}<br />{uid}
+                    <p className={file || receivedFile ? `text-white` : `text-[rgba(0,0,0,0)]`}>
+                        {
+                            !file && !receivedFile && <span>No output</span>
+                        }
+                        {
+                            file && !receivedFile &&
+                            <span>
+                                {file.name} | {name} | {uid}
+                            </span>
+                        }
+                        {
+                            receivedFile && !file &&
+                            <span>
+                                {receivedFile}
+                            </span>
+                        }
                     </p>
                     {/* {file &&
                         <form action="/uploadresume" method="post" className="w-full">

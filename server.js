@@ -20,19 +20,27 @@ app.post("/uploadresume", async function (req, res) {
         console.log(`backend: ${name} ${uid} ${typeof (file)}`);
         res.status(200).json({ message: `${name}` });
     } catch (e) {
-        res.status(200).json({ message: 'error' });
+        res.status(404).json({ message: 'error' });
         console.log(`backend: ${e}`);
     }
     // res.redirect("/home");
 });
 
-app.get("/viewresume", cors(), async function (req, res) {
-    res.send("Hello World!");
-    const { name } = req.body || "file received";
+app.get("/viewresume", async function (req, res) {
+    console.log("view function");
+
+    // res.send("Hello World!");
+    const { name } = "the file";
+    const responseData = {
+        name: 'the_file',
+        time: new Date(),
+        file: 'file as object',
+    };
 
     try {
-
+        res.status(200).json(responseData);
     } catch (e) {
+        res.status(404).json({ message: e.message });
         console.log(e);
     }
 });
