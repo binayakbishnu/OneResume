@@ -1,28 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 
-import { auth, db } from "../Authentication/firebase";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import { auth, /* db */ } from "../Authentication/firebase";
+// import { query, collection, getDocs, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import { GoCopy } from "react-icons/go";
 
 import axios from "axios";
 
 function HomePage() {
     const [user, loading, /* error */] = useAuthState(auth);
+
     // const [name, setName] = useState("");
-    const [email, setEmail] = useState(user?.email);
-    const fetchUserData = async () => {
+    // const [email, setEmail] = useState(user?.email);
+    /* const fetchUserData = async () => {
+        console.log('fetching user data...');
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
             const doc = await getDocs(q);
             const data = doc?.docs[0]?.data();
             // setName(data.name);
-            setEmail(data?.email);
+            // setEmail(data?.email);
         } catch (err) {
             console.error(err);
             alert("An error occured while fetching user data");
         }
-    };
+    }; */
 
     const fileUploadRef = useRef(null);
     const uploadButtonTrigger = () => {
@@ -37,14 +41,14 @@ function HomePage() {
 
         // setFile(e.target.files[0]);
 
-        sendByAxios(e.target?.files[0]);
+        sendByAxios(e.target?.files[0]).then(() => viewFileTrigger());
         console.log("after");
     }
 
     const sendByAxios = async (file_) => {
         const formData = new FormData();
         // formData.append('user_id', uid);
-        formData.append('user_id', email);
+        formData.append('user_id', user?.email);
         formData.append('fileData', file_);
 
         try {
@@ -67,14 +71,60 @@ function HomePage() {
         }
     }
 
-    const [receivedLink, setReceivedLink] = useState(null);
+    const [receivedLink, setReceivedLink] = useState("no link");
     const viewFileTrigger = async () => {
-        await axios.get(`https://oneresume-vd25.onrender.com/`, {
+        // await axios.get(`https://oneresume-vd25.onrender.com/`, {
 
-        }).then((res) => {
-            setReceivedLink(res);
-            console.log(receivedLink);
-        })
+        // }).then((res) => {
+        //     setReceivedLink(res);
+        //     console.log(receivedLink);
+        // })
+        if (user) {
+            console.log(user?.email);
+            /* try {
+                await axios.post(`https://oneresume-vd25.onrender.com/api/getResume`, {
+                    user_id: email,
+                }).then((res) => {
+                    console.log(typeof (res.data));
+                    return res.data;
+                    // return res.
+                }).catch((err) => {
+                    console.log(err);
+                }).finally(() => {
+                    // console.log('axios completed successfully');
+                });
+            } catch (err) {
+                console.log(err);
+            } */
+
+            await receivedByAxios();
+        }
+    }
+
+    const receivedByAxios = async () => {
+        try {
+            await axios.post(`https://oneresume-vd25.onrender.com/api/getResume`, {
+                user_id: user?.email,
+            }).then((res) => {
+                // console.log(res);
+                setReceivedLink(res.data);
+                // return res.
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                // console.log('axios completed successfully');
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const copyLink = () => {
+        let element = document.getElementById('linkToCopy');
+        navigator.clipboard.writeText(element.innerText);
+        alert("copied");
+
+        navigate(element.innerText);
     }
 
     const navigate = useNavigate();
@@ -82,19 +132,20 @@ function HomePage() {
         if (loading) return;
         if (!user) return navigate("/");
 
-        fetchUserData();
-
-        // sendByAxios();
-    },);
+        viewFileTrigger();
+        // viewFileTrigger();
+    }, [user, loading]);
 
     return (
         <div className='text-white flex flex-col flex-1'>
+
             <input ref={fileUploadRef} type="file"
                 className="hidden w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 onChange={fileUpload}
                 onClick={(e) => { e.target.value = null }}
                 accept="application/pdf"
             />
+
             <div className="homePageMain flex-1 flex flex-col items-center justify-center gap-[2%] w-[60%] md:w-[80%] m-auto">
 
                 {/* <div className=" hidden md:flex items-center justify-center w-full">
@@ -116,13 +167,29 @@ function HomePage() {
                         Upload resume
                     </button>
 
-                    <button
+                    {/* <button
                         className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]"
-                        onClick={viewFileTrigger}>
+                    // onClick={viewFileTrigger}
+                    >
                         View resume
-                    </button>
+                    </button> */}
                 </div>
 
+                <div className={`${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                    'text-[rgba(0,0,0,0)]' :
+                    'text-white'} m-0 text-center w-full`}>
+                    <p id="linkToCopy" className={
+                        `mb-1 flex flex-row items-center justify-between gap-2 text-center text-xs m-auto cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)] ps-2 w-fit rounded`
+                    }
+                    >
+                        <span
+                            onClick={copyLink}
+                        >{receivedLink}</span>
+                        <span className={`p-1 bg-[rgba(100,100,100,0.5)] rounded-r`}
+                            onClick={copyLink}><GoCopy /></span>
+                    </p>
+                    <p className={`text-sm`}>(This link will not change with new file uploads)</p>
+                </div>
             </div>
         </div>
     )
