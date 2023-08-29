@@ -123,8 +123,6 @@ function HomePage() {
         let element = document.getElementById('linkToCopy');
         navigator.clipboard.writeText(element.innerText);
         alert("copied");
-
-        navigate(element.innerText);
     }
 
     const navigate = useNavigate();
@@ -133,7 +131,6 @@ function HomePage() {
         if (!user) return navigate("/");
 
         viewFileTrigger();
-        // viewFileTrigger();
     }, [user, loading]);
 
     return (
@@ -175,17 +172,22 @@ function HomePage() {
                     </button> */}
                 </div>
 
-                <div className={`${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
-                    'text-[rgba(0,0,0,0)]' :
-                    'text-white'} m-0 text-center w-full`}>
+                <div className={
+                    `${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                        'text-[rgba(0,0,0,0)] cursor-default' :
+                        'text-white'} m-0 text-center w-full`}>
                     <p id="linkToCopy" className={
-                        `mb-1 flex flex-row items-center justify-between gap-2 text-center text-xs m-auto cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)] ps-2 w-fit rounded`
+                        `mb-1 flex flex-row items-center justify-between gap-2 text-center text-xs m-auto ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                            '' :
+                            'cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)]'}  ps-2 w-fit rounded`
                     }
                     >
                         <span
                             onClick={copyLink}
                         >{receivedLink}</span>
-                        <span className={`p-1 bg-[rgba(100,100,100,0.5)] rounded-r`}
+                        <span className={`p-1 ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                        '' :
+                        'bg-[rgba(100,100,100,0.5)]'} rounded-r`}
                             onClick={copyLink}><GoCopy /></span>
                     </p>
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
