@@ -177,7 +177,7 @@ function HomePage() {
                         'text-[rgba(0,0,0,0)] cursor-default' :
                         'text-white'} m-0 text-center w-full`}>
                     <p id="linkToCopy" className={
-                        `mb-1 flex flex-row items-center justify-between gap-2 text-center text-xs m-auto ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                        `mb-1 flex flex-row items-stretch justify-between gap-2 text-center text-xs m-auto ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                             '' :
                             'cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)]'}  ps-2 w-fit rounded`
                     }
@@ -186,8 +186,8 @@ function HomePage() {
                             onClick={copyLink}
                         >{receivedLink}</span>
                         <span className={`p-1 ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
-                        '' :
-                        'bg-[rgba(100,100,100,0.5)]'} rounded-r`}
+                            '' :
+                            'bg-[rgba(100,100,100,0.5)]'} flex flex-col justify-center p-auto rounded-r`}
                             onClick={copyLink}><GoCopy /></span>
                     </p>
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
