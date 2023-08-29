@@ -38,9 +38,25 @@ function HomePage() {
     const handleUploadButtonState = async (btnState) => {
         setUploadLoading(btnState);
     }
+    const maxFileSize = 200000;
+    const [fileSizeExceeded, setFileSizeExceeded] = useState(false);
+    const allowedTypes = ['application/pdf'];
+    const [fileTypeWrong, setFileTypeWrong] = useState(false);
     const fileUpload = async (e) => {
-        if (!e.target.files) {
+        if (!e.target?.files) {
             alert('File not uploaded');
+            return;
+        }
+        setFileSizeExceeded(false);
+        setFileTypeWrong(false);
+
+        if (e.target?.files[0].size > maxFileSize) {
+            setFileSizeExceeded(true);
+            return;
+        }
+
+        if (!allowedTypes.includes(e.target?.files[0].type)) {
+            setFileTypeWrong(true);
             return;
         }
 
@@ -214,6 +230,16 @@ function HomePage() {
                             onClick={copyLink}><GoCopy /></span>
                     </p>
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
+                    {fileSizeExceeded && (
+                        <p className='text-red-500'>
+                            File size exceeded the limit of {maxFileSize / 1000} KB
+                        </p>
+                    )}
+                    {fileTypeWrong && (
+                        <p className='text-red-500'>
+                            Only .pdf allowed
+                        </p>
+                    )}
                 </div>
             </div>
         </div>
