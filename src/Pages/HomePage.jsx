@@ -82,7 +82,7 @@ function HomePage() {
         formData.append('fileData', file_);
 
         try {
-            await axios.post(`https://oneresume-vd25.onrender.com/api/uploadResume`, formData).then(res => {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/uploadResume`, formData).then(res => {
                 console.log(res);
                 setReceivedLink(null);
                 // setTimeout(() => {
@@ -133,7 +133,7 @@ function HomePage() {
 
     const receivedByAxios = async () => {
         try {
-            await axios.post(`https://oneresume-vd25.onrender.com/api/getResume`, {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/getResume`, {
                 user_id: user?.email,
             }).then((res) => {
                 // console.log(res);
