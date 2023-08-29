@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { AiOutlineGoogle } from 'react-icons/ai'
+import { ReactComponent as Loader } from '../../assets/spinner.svg'
 
 import { auth, logInWithEmailAndPassword, signInWithGoogle } from "../../Authentication/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -11,10 +12,26 @@ function LoginCard() {
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
+    const [loginLoadingGoogle, setLoginLoadingGoogle] = useState(false);
+    const handleGoogleLoginState = async (loginState) => {
+        setLoginLoadingGoogle(loginState);
+    }
+
     const googleLogin = () => {
         console.log('google login');
         signInWithGoogle();
     }
+
+    const googleLoginTrigger = async () => {
+        handleGoogleLoginState(true).then(() => googleLogin()).then(() => handleGoogleLoginState(false));
+    }
+
+    const [loginLoading, setLoginLoading] = useState(false);
+    const handleLoginBtnState = async (loginState) => {
+        setLoginLoading(loginState);
+    }
+
     const submitLogin = async () => {
         if (email === "") {
             setLoginEmailValid(false);
@@ -39,6 +56,10 @@ function LoginCard() {
                 setLoginPasswordError("Incorrect password");
             }
         }
+    }
+
+    const loginBtnTrigger = async () => {
+        handleLoginBtnState(true).then(() => submitLogin()).then(() => handleLoginBtnState(false));
     }
 
     const [loginEmailValid, setLoginEmailValid] = useState(true);
@@ -71,9 +92,16 @@ function LoginCard() {
 
     return (
         <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-10'>
-            <button onClick={googleLogin} className='lg:mb-4 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
+            <button onClick={googleLoginTrigger} className='lg:mb-4 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
                 <AiOutlineGoogle className='text-2xl' />
-                Google login
+                {loginLoadingGoogle ?
+                    // <span clasName="h=[100px]">••••••••</span>
+                    <Loader
+                        className="animate-spin duration-500 infinite linear"
+                    />
+                    :
+                    'Google login'
+                }
             </button>
 
             {/* <h2
@@ -124,7 +152,19 @@ function LoginCard() {
                     <label htmlFor="">Remember me</label>
                 </div> */}
 
-                <button onClick={submitLogin} type="button" className='mt-5 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
+                <button onClick={loginBtnTrigger} type="button"
+                    className={`h-[45px] flex flex-row justify-center items-center mt-5 bg-[#202020] ${loginLoading ? '' : 'hover:bg-[#222222]'} w-[100%] py-2 px-5 rounded`}
+                    disabled={loginLoading ? true : false}
+                >
+                    {loginLoading ?
+                        // <span clasName="h=[100px]">••••••••</span>
+                        <Loader
+                            className="animate-spin duration-500 infinite linear"
+                        />
+                        :
+                        'Login'
+                    }
+                </button>
             </form>
 
 

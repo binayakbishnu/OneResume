@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { /* Link, */ useNavigate } from 'react-router-dom'
 
 import { AiFillCheckCircle, AiOutlineGoogle } from 'react-icons/ai'
+import { ReactComponent as Loader } from '../../assets/spinner.svg'
 
 import { auth, registerWithEmailAndPassword, signInWithGoogle, } from "../../Authentication/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -18,6 +19,12 @@ function SignupCard() {
         console.log('google signup');
         signInWithGoogle();
     }
+
+    const [signupLoading, setSignupLoading] = useState(false);
+    const handleSignupBtnState = async (loginState) => {
+        setSignupLoading(loginState);
+    }
+
     const submitSignup = async () => {
         if (email === "") {
             setEmailValid(false);
@@ -54,6 +61,10 @@ function SignupCard() {
         else {
             alert("Invalid fields");
         }
+    }
+
+    const signupButtonTrigger = async () => {
+        handleSignupBtnState(true).then(() => submitSignup()).then(() => handleSignupBtnState(false));
     }
 
     const [emailValid, setEmailValid] = useState(true);
@@ -258,7 +269,18 @@ function SignupCard() {
                     <label htmlFor="">Remember me</label>
                 </div> */}
 
-                <button onClick={submitSignup} type="button" className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 rounded'>Submit</button>
+                <button onClick={signupButtonTrigger} type="button" className={`h-[45px] flex flex-row justify-center items-center bg-[#202020] ${signupLoading ? '' : 'hover:bg-[#222222]'} w-[100%] py-2 px-5 rounded`}
+                    disabled={signupLoading ? true : false}
+                >
+                    {signupLoading ?
+                        // <span clasName="h=[100px]">••••••••</span>
+                        <Loader
+                            className="animate-spin duration-500 infinite linear"
+                        />
+                        :
+                        'Signup'
+                    }
+                </button>
             </form>
 
         </div>
