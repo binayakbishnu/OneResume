@@ -6,6 +6,7 @@ import { auth, /* db */ } from "../Authentication/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { GoCopy } from "react-icons/go";
+import { ReactComponent as Loader } from '../assets/spinner.svg'
 
 import axios from "axios";
 
@@ -33,6 +34,10 @@ function HomePage() {
         fileUploadRef.current?.click();
     }
 
+    const [uploadLoading, setUploadLoading] = useState(false);
+    const handleUploadButtonState = async (btnState) => {
+        setUploadLoading(btnState);
+    }
     const fileUpload = async (e) => {
         if (!e.target.files) {
             alert('File not uploaded');
@@ -41,8 +46,17 @@ function HomePage() {
 
         // setFile(e.target.files[0]);
 
-        sendByAxios(e.target?.files[0]).then(() => viewFileTrigger());
-        console.log("after");
+        handleUploadButtonState(true).then(() => sendByAxios(e.target?.files[0])).then(() => viewFileTrigger()).then(() => handleUploadButtonState(false)).then(() => console.log('after'));
+        // setUploadLoading(true
+        // ).then(
+        //     () => sendByAxios(e.target?.files[0])
+        // ).then(
+        //     () => viewFileTrigger()
+        // ).then(
+        //     () => setUploadLoading(false)
+        // ).then(
+        //     () => console.log('after')
+        // );
     }
 
     const sendByAxios = async (file_) => {
@@ -159,9 +173,18 @@ function HomePage() {
                 </div> */}
 
                 <div className="py-5 w-full flex flex-col md:flex-row items-center justify-between md:justify-center gap-2 md:gap-[2%]">
-                    <button className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]"
-                        onClick={uploadButtonTrigger}>
-                        Upload resume
+                    <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]
+                    flex flex-row justify-center items-center h-[80px]`}
+                        onClick={uploadButtonTrigger}
+                        disabled={uploadLoading ? true : false}
+                    >
+                        {uploadLoading ?
+                            // <span clasName="h=[100px]">••••••••</span>
+                            <Loader
+                                className="animate-spin duration-500 infinite linear"
+                            />
+                            :
+                            'Upload resume'}
                     </button>
 
                     {/* <button
