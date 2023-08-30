@@ -44,7 +44,7 @@ function HomePage() {
     const [fileTypeWrong, setFileTypeWrong] = useState(false);
     const fileUpload = async (e) => {
         if (!e.target?.files) {
-            alert('File not uploaded');
+            // alert('File not uploaded');
             return;
         }
         setFileSizeExceeded(false);
@@ -62,7 +62,8 @@ function HomePage() {
 
         // setFile(e.target.files[0]);
 
-        handleUploadButtonState(true).then(() => sendByAxios(e.target?.files[0])).then(() => viewFileTrigger()).then(() => handleUploadButtonState(false)).then(() => console.log('after'));
+        handleUploadButtonState(true).then(() => sendByAxios(e.target?.files[0])).then(() => viewFileTrigger()).then(() => handleUploadButtonState(false)
+        )/* .then(() => console.log('after')) */;
         // setUploadLoading(true
         // ).then(
         //     () => sendByAxios(e.target?.files[0])
@@ -83,7 +84,7 @@ function HomePage() {
 
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/uploadResume`, formData).then(res => {
-                console.log(res);
+                // console.log(res);
                 setReceivedLink(null);
                 // setTimeout(() => {
                 //     window.location.reload(false);
@@ -91,13 +92,13 @@ function HomePage() {
                 // }, 2000);
 
             }).catch(e => {
-                console.log(`frontend: axios error: ${e}`)
+                // console.log(`frontend: axios error: ${e}`)
             }).finally(() => {
-                console.log('frontend: axios completed');
+                // console.log('frontend: axios completed');
             })
         }
         catch (e) {
-            console.log(`frontend: ${e}`);
+            // console.log(`frontend: ${e}`);
         }
     }
 
@@ -110,7 +111,7 @@ function HomePage() {
         //     console.log(receivedLink);
         // })
         if (user) {
-            console.log(user?.email);
+            // console.log(user?.email);
             /* try {
                 await axios.post(`https://oneresume-vd25.onrender.com/api/getResume`, {
                     user_id: email,
@@ -140,19 +141,19 @@ function HomePage() {
                 setReceivedLink(res.data);
                 // return res.
             }).catch((err) => {
-                console.log(err);
+                // console.log(err);
             }).finally(() => {
                 // console.log('axios completed successfully');
             });
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     }
 
     const copyLink = () => {
         let element = document.getElementById('linkToCopy');
         navigator.clipboard.writeText(element.innerText);
-        alert("copied");
+        // alert("copied");
     }
 
     const navigate = useNavigate();

@@ -11,11 +11,11 @@ function PwdReset() {
     const submitReset = () => {
 
         if (!email) {
-            alert("Please enter your email");
+            // alert("Please enter your email");
             return;
         }
 
-        console.log('submit reset');
+        // console.log('submit reset');
         sendPasswordReset(email);
     }
     useEffect(() => {

@@ -16,7 +16,7 @@ function SignupCard() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
     const googleSignup = () => {
-        console.log('google signup');
+        // console.log('google signup');
         signInWithGoogle();
     }
 
@@ -40,7 +40,7 @@ function SignupCard() {
         }
         else if (emailValid && passwordValid && confirmPasswordValid) {
             const submitError = await registerWithEmailAndPassword(/* name,  */email, password);
-            console.warn(submitError);
+            // console.warn(submitError);
             if (submitError !== "") {
                 setEmailValid(false);
                 setEmailError("Email ID already exists");
@@ -59,7 +59,9 @@ function SignupCard() {
             }
         }
         else {
-            alert("Invalid fields");
+            setConfirmPasswordValid(false);
+            setConfirmPasswordError("Invalid fields");
+            // alert("Invalid fields");
         }
     }
 

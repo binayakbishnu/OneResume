@@ -18,8 +18,8 @@ function Profile() {
             // setName(data.name);
             setEmail(data?.email);
         } catch (err) {
-            console.error(err);
-            alert("An error occured while fetching user data");
+            // console.error(err);
+            // alert("An error occured while fetching user data");
         }
     };
 

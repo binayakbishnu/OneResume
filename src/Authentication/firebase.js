@@ -48,8 +48,8 @@ const signInWithGoogle = async () => {
             });
         }
     } catch (err) {
-        console.error(err);
-        alert(err.message);
+        // console.error(err);
+        // alert(err.message);
     }
 };
 
@@ -66,7 +66,7 @@ const logInWithEmailAndPassword = async (email, password) => {
             return "Please check your password";
         }
         else {
-            alert(err.message);
+            return err.message + "-Try again";
         }
     }
 };
@@ -88,8 +88,7 @@ const registerWithEmailAndPassword = async (/* name, */ email, password) => {
             return "Email ID already exists";
         }
         else {
-            alert(err.message);
-            return err.message;
+            return err.message + "-Try again";
         }
     }
 };
@@ -99,17 +98,17 @@ const sendPasswordReset = async (email) => {
         await sendPasswordResetEmail(auth, email);
         alert("Password reset link sent!");
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         if (err.message === "Firebase: Error (auth/user-not-found).") {
-            alert("User not found");
+            return "User not found";
         }
         else
-            alert(err.message);
+            return err.message + "-Try again";
     }
 };
 
 const logout = () => {
-    console.log("User logged out");
+    // console.log("User logged out");
     signOut(auth);
 };
 

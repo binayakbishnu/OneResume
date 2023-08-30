@@ -8,26 +8,24 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import NavBar from '../Components/NavBar'
 
 function Wrapper() {
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading, /* error */] = useAuthState(auth);
     // const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const fetchUserData = async () => {
+    /* const fetchUserData = async () => {
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
             const doc = await getDocs(q);
             const data = doc?.docs[0]?.data();
             // setName(data.name);
-            setEmail(data?.email);
         } catch (err) {
             console.error(err);
             alert("An error occured while fetching user data");
         }
-    };
+    }; */
     const navigate = useNavigate();
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
-        fetchUserData();
+        // fetchUserData();
 
         // localStorage.setItem(user?.uid, JSON.stringify(file));
         // setUrl(localStorage.getItem('recent-image'));

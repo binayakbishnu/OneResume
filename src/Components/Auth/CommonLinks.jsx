@@ -11,7 +11,7 @@ export function LoginLink({style}) {
 }
 export function LogoutLink({style}) {
     const submitLogout = () => {
-        console.log('submit logout');
+        // console.log('submit logout');
         logout();
     }
     return (

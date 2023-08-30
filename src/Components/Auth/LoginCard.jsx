@@ -19,7 +19,7 @@ function LoginCard() {
     }
 
     const googleLogin = () => {
-        console.log('google login');
+        // console.log('google login');
         signInWithGoogle();
     }
 
