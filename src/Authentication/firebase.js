@@ -96,11 +96,13 @@ const registerWithEmailAndPassword = async (/* name, */ email, password) => {
 const sendPasswordReset = async (email) => {
     try {
         await sendPasswordResetEmail(auth, email);
-        alert("Password reset link sent!");
+        return "Password reset link sent!";
     } catch (err) {
-        // console.error(err);
         if (err.message === "Firebase: Error (auth/user-not-found).") {
             return "User not found";
+        }
+        else if(err.message === "Firebase: Error (auth/invalid-email)."){
+            return "Check the Email ID"
         }
         else
             return err.message + "-Try again";
