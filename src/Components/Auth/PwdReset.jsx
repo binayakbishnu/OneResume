@@ -23,7 +23,7 @@ function PwdReset() {
         setMiscError(false);
         if (response_ === "Password reset link sent!") {
             // pop up
-            console.log("sent");
+            // console.log("sent");
         }
         else if (response_ === "User not found") {
             setMiscError(true);
