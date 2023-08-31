@@ -80,7 +80,7 @@ function PwdReset() {
     }, [user, loading]);
     return (
         <div className="bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5">
-            <form className='flex flex-col gap-5'>
+            <form onSubmit={(e) => {e.preventDefault();}} className='flex flex-col gap-5'>
                 <div className='relative'>
                     <label htmlFor="" className='absolute top-[-0.8rem] left-[1rem] z-1 text-white py-0 px-[5px] bg-[#191919]'>
                         Email
