@@ -163,7 +163,7 @@ function HomePage() {
         let element = document.getElementById('linkToCopy');
         navigator.clipboard.writeText(element.innerText);
         setCopied(true);
-        setTimeout(()=>{setCopied(false);},1500)
+        setTimeout(() => { setCopied(false); }, 1500)
     }
 
     const navigate = useNavigate();
@@ -184,7 +184,7 @@ function HomePage() {
                 accept="application/pdf"
             />
 
-            <div className="homePageMain flex-1 flex flex-col items-center justify-center gap-[2%] w-[60%] md:w-[80%] m-auto">
+            <div className="homePageMain flex-1 flex flex-col items-center justify-center gap-[2%] w-full md:w-[80%] m-auto">
 
                 {/* <div className=" hidden md:flex items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -199,7 +199,7 @@ function HomePage() {
                     </label>
                 </div> */}
 
-                <div className="py-5 w-full flex flex-col items-center justify-between">
+                <div className="py-5 flex flex-col items-center justify-between w-[60%] md:w-full">
                     <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]
                     flex flex-row justify-center items-center h-[80px]`}
                         onClick={uploadButtonTrigger}
@@ -229,19 +229,19 @@ function HomePage() {
                 <div className={
                     `${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                         'text-[rgba(0,0,0,0)] cursor-default' :
-                        'text-white'} m-0 text-center w-full`}>
+                        'text-white'} m-0 text-center w-[80%] lg:w-full`}>
                     <p id="linkToCopy" className={
-                        `mb-1 flex flex-row items-stretch justify-between gap-2 text-center text-xs m-auto ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                        ` mb-1 flex flex-row items-stretch justify-between gap-2 text-center text-xs m-auto
+                        ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                             '' :
-                            'cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)]'}  ps-2 w-fit rounded`
+                            'cursor-pointer bg-[rgb(35,35,35)] hover:bg-[rgb(50,50,50)]'}  ps-2 w-full lg:w-fit rounded`
                     }
                     >
-                        <span
-                            onClick={copyLink}
-                        >{receivedLink}</span>
-                        <span className={`p-1 ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
-                            '' :
-                            'bg-[rgba(100,100,100,0.5)]'} flex flex-col justify-center p-auto rounded-r`}
+                        <span className="break-all w-[98%] lg:w-auto" onClick={copyLink}>{receivedLink}</span>
+                        <span className={`hidden md:block p-1
+                            ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
+                                '' :
+                                'bg-[rgba(100,100,100,0.5)]'} flex flex-col justify-center p-auto rounded-r`}
                             onClick={copyLink}><GoCopy /></span>
                     </p>
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
