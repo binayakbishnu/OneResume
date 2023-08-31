@@ -41,10 +41,11 @@ function HomePage() {
     const handleUploadButtonState = async (btnState) => {
         setUploadLoading(btnState);
     }
-    const maxFileSize = 200000;
+    const maxFileSize = 200001;
     const [fileSizeExceeded, setFileSizeExceeded] = useState(false);
     const allowedTypes = ['application/pdf'];
     const [fileTypeWrong, setFileTypeWrong] = useState(false);
+    const [fileSize, setFileSize] = useState(0);
     const fileUpload = async (e) => {
         if (!e.target?.files) {
             // alert('File not uploaded');
@@ -54,6 +55,7 @@ function HomePage() {
         setFileTypeWrong(false);
 
         if (e.target?.files[0].size > maxFileSize) {
+            setFileSize(e.target?.files[0].size);
             setFileSizeExceeded(true);
             return;
         }
@@ -184,7 +186,7 @@ function HomePage() {
                 accept="application/pdf"
             />
 
-            <div className="homePageMain flex-1 flex flex-col items-center justify-center gap-[2%] w-full md:w-[80%] m-auto">
+            <div className="homePageMain pb-10 flex-1 flex flex-col items-center justify-center gap-[2%] w-full md:w-[80%] m-auto">
 
                 {/* <div className=" hidden md:flex items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -213,10 +215,11 @@ function HomePage() {
                             :
                             'Upload resume'}
                     </button>
+                    <p className="text-white text-sm">.pdf only | max 200KB</p>
                     <p className={`p-0 m-0 ${miscError ? 'text-red-500' : 'text-green-500'}`}>{miscErrorMessage}</p>
                     {fileSizeExceeded && (
-                        <p className='text-red-500'>
-                            File size exceeded the limit of {maxFileSize / 1000} KB
+                        <p className='text-sm text-red-500'>
+                            File size exceeded the limit of {(maxFileSize - 1) / 1000}KB (your file: {fileSize / 1000}KB)
                         </p>
                     )}
                     {fileTypeWrong && (
