@@ -158,10 +158,12 @@ function HomePage() {
         }
     }
 
+    const [copied, setCopied] = useState(false);
     const copyLink = () => {
         let element = document.getElementById('linkToCopy');
         navigator.clipboard.writeText(element.innerText);
-        // alert("copied");
+        setCopied(true);
+        setTimeout(()=>{setCopied(false);},1500)
     }
 
     const navigate = useNavigate();
@@ -212,6 +214,16 @@ function HomePage() {
                             'Upload resume'}
                     </button>
                     <p className={`p-0 m-0 ${miscError ? 'text-red-500' : 'text-green-500'}`}>{miscErrorMessage}</p>
+                    {fileSizeExceeded && (
+                        <p className='text-red-500'>
+                            File size exceeded the limit of {maxFileSize / 1000} KB
+                        </p>
+                    )}
+                    {fileTypeWrong && (
+                        <p className='text-red-500'>
+                            Only .pdf allowed
+                        </p>
+                    )}
                 </div>
 
                 <div className={
@@ -233,16 +245,7 @@ function HomePage() {
                             onClick={copyLink}><GoCopy /></span>
                     </p>
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
-                    {fileSizeExceeded && (
-                        <p className='text-red-500'>
-                            File size exceeded the limit of {maxFileSize / 1000} KB
-                        </p>
-                    )}
-                    {fileTypeWrong && (
-                        <p className='text-red-500'>
-                            Only .pdf allowed
-                        </p>
-                    )}
+                    <p className={`${copied ? 'text-green-500' : 'text-[rgba(0,0,0,0)]'}`}>Copied!</p>
                 </div>
             </div>
         </div>
