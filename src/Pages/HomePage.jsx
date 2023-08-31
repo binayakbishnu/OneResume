@@ -250,6 +250,12 @@ function HomePage() {
                     <p className={`text-sm`}>(This link will not change with new file uploads)</p>
                     <p className={`${copied ? 'text-green-500' : 'text-[rgba(0,0,0,0)]'}`}>Copied!</p>
                 </div>
+
+                <div className={`${fileSizeExceeded ? 'absolute top-[20%] lg:top-auto bottom-auto lg:bottom-[20%]' : 'hidden'} text-center text-white m-auto h-fit lg:w-fit bg-[#222222] rounded px-6 py-4`}>
+                    Compress your file with <a href="https://tinywow.com/" target="_blank"
+                        className={`underline`}>
+                        https://tinywow.com</a>
+                </div>
             </div>
         </div>
     )
