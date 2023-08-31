@@ -13,6 +13,9 @@ import axios from "axios";
 function HomePage() {
     const [user, loading, /* error */] = useAuthState(auth);
 
+    const [miscError, setMiscError] = useState(false);
+    const [miscErrorMessage, setMiscErrorMessage] = useState("");
+
     // const [name, setName] = useState("");
     // const [email, setEmail] = useState(user?.email);
     /* const fetchUserData = async () => {
@@ -62,8 +65,12 @@ function HomePage() {
 
         // setFile(e.target.files[0]);
 
-        handleUploadButtonState(true).then(() => sendByAxios(e.target?.files[0])).then(() => viewFileTrigger()).then(() => handleUploadButtonState(false)
-        )/* .then(() => console.log('after')) */;
+        handleUploadButtonState(true
+        ).then(() => sendByAxios(e.target?.files[0])
+        ).then(() => viewFileTrigger()
+        ).then(() => handleUploadButtonState(false)
+        ).then(() => setTimeout(() => { setMiscErrorMessage(""); }, 1000)
+        );
         // setUploadLoading(true
         // ).then(
         //     () => sendByAxios(e.target?.files[0])
@@ -90,15 +97,18 @@ function HomePage() {
                 //     window.location.reload(false);
                 //     // console.log('This will run after 1 second!')
                 // }, 2000);
-
+                setMiscError(false);
+                setMiscErrorMessage('Uploaded!');
             }).catch(e => {
-                // console.log(`frontend: axios error: ${e}`)
+                setMiscError(true);
+                setMiscErrorMessage('Please reload and try again');
             }).finally(() => {
                 // console.log('frontend: axios completed');
             })
         }
         catch (e) {
-            // console.log(`frontend: ${e}`);
+            setMiscError(true);
+            setMiscErrorMessage('Please reload and try again');
         }
     }
 
@@ -137,16 +147,14 @@ function HomePage() {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/getResume`, {
                 user_id: user?.email,
             }).then((res) => {
-                // console.log(res);
                 setReceivedLink(res.data);
-                // return res.
-            }).catch((err) => {
-                // console.log(err);
+            }).catch((e) => {
+                // console.log(e);
             }).finally(() => {
                 // console.log('axios completed successfully');
             });
-        } catch (err) {
-            // console.log(err);
+        } catch (e) {
+            // console.log(e);
         }
     }
 
@@ -189,7 +197,7 @@ function HomePage() {
                     </label>
                 </div> */}
 
-                <div className="py-5 w-full flex flex-col md:flex-row items-center justify-between md:justify-center gap-2 md:gap-[2%]">
+                <div className="py-5 w-full flex flex-col items-center justify-between">
                     <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]
                     flex flex-row justify-center items-center h-[80px]`}
                         onClick={uploadButtonTrigger}
@@ -203,13 +211,7 @@ function HomePage() {
                             :
                             'Upload resume'}
                     </button>
-
-                    {/* <button
-                        className="bg-[#191919] lg:hover:bg-[#202020] rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]"
-                    // onClick={viewFileTrigger}
-                    >
-                        View resume
-                    </button> */}
+                    <p className={`p-0 m-0 ${miscError ? 'text-red-500' : 'text-green-500'}`}>{miscErrorMessage}</p>
                 </div>
 
                 <div className={
