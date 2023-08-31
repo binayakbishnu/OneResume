@@ -13,14 +13,15 @@ function LoginCard() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
+    const [googleError, setGoogleError] = useState(false);
+    const [googleErrorMessage, setGoogleErrorMessage] = useState("no error");
+    const googleLogin = async () => {
+        await signInWithGoogle().then((response) => { setGoogleError(true); setGoogleErrorMessage(response.message); });
+    }
+
     const [loginLoadingGoogle, setLoginLoadingGoogle] = useState(false);
     const handleGoogleLoginState = async (loginState) => {
         setLoginLoadingGoogle(loginState);
-    }
-
-    const googleLogin = () => {
-        // console.log('google login');
-        signInWithGoogle();
     }
 
     const googleLoginTrigger = async () => {
@@ -92,18 +93,20 @@ function LoginCard() {
 
     return (
         <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-10'>
-            <button onClick={googleLoginTrigger} className='lg:mb-4 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
-                <AiOutlineGoogle className='text-2xl' />
-                {loginLoadingGoogle ?
-                    // <span clasName="h=[100px]">••••••••</span>
-                    <Loader
-                        className="animate-spin duration-500 infinite linear"
-                    />
-                    :
-                    'Google login'
-                }
-            </button>
-
+            <div className='lg:mb-0'>
+                <button onClick={googleLoginTrigger} className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
+                    <AiOutlineGoogle className='text-2xl' />
+                    {loginLoadingGoogle ?
+                        // <span clasName="h=[100px]">••••••••</span>
+                        <Loader
+                            className="animate-spin duration-500 infinite linear"
+                        />
+                        :
+                        'Google login'
+                    }
+                </button>
+                <p className={`p-0 m-0 text-[0.8em] ${googleError ? 'text-red-500' : 'text-[rgba(0,0,0,0)]'}`}>{googleErrorMessage}</p>
+            </div>
             {/* <h2
                 className='w-[100%] text-center border border-0 border-b-[1px] border-dashed border-white leading-[0.1em]'
             >
@@ -166,7 +169,6 @@ function LoginCard() {
                     }
                 </button>
             </form>
-
 
         </div>
     )

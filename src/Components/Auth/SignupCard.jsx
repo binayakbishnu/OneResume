@@ -15,9 +15,20 @@ function SignupCard() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-    const googleSignup = () => {
-        // console.log('google signup');
-        signInWithGoogle();
+
+    const [googleError, setGoogleError] = useState(false);
+    const [googleErrorMessage, setGoogleErrorMessage] = useState("no error");
+    const googleSignup = async () => {
+        await signInWithGoogle().then((response) => { setGoogleError(true); setGoogleErrorMessage(response.message); });
+    }
+
+    const [signupLoadingGoogle, setSignupLoadingGoogle] = useState(false);
+    const handleGoogleSignupState = async (signupState) => {
+        setSignupLoadingGoogle(signupState)
+    }
+
+    const googleSignupTrigger = async () => {
+        handleGoogleSignupState(true).then(() => googleSignup()).then(() => handleGoogleSignupState(false));
     }
 
     const [signupLoading, setSignupLoading] = useState(false);
@@ -184,10 +195,20 @@ function SignupCard() {
 
     return (
         <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-6'>
-            <button onClick={googleSignup} className='lg:mb-4 bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
-                <AiOutlineGoogle className='text-2xl' />
-                Google login
-            </button>
+            <div className='lg:mb-0'>
+                <button onClick={googleSignupTrigger} className='bg-[#202020] hover:bg-[#222222] w-[100%] py-2 px-5 flex flex-row items-center justify-center rounded gap-2'>
+                    <AiOutlineGoogle className='text-2xl' />
+                    {signupLoadingGoogle ?
+                        // <span clasName="h=[100px]">••••••••</span>
+                        <Loader
+                            className="animate-spin duration-500 infinite linear"
+                        />
+                        :
+                        'Google login'
+                    }
+                </button>
+                <p className={`p-0 m-0 text-[0.8em] ${googleError ? 'text-red-500' : 'text-[rgba(0,0,0,0)]'}`}>{googleErrorMessage}</p>
+            </div>
 
             <form className='flex flex-col gap-5'>
                 {/* <div className='relative'>

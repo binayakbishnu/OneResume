@@ -39,6 +39,8 @@ const signInWithGoogle = async () => {
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const docs = await getDocs(q);
+
+        // if user not found, add it
         if (docs.docs.length === 0) {
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
@@ -47,9 +49,11 @@ const signInWithGoogle = async () => {
                 email: user.email,
             });
         }
+
+        return "";
     } catch (err) {
-        // console.error(err);
-        // alert(err.message);
+        // alert(err);
+        return err;
     }
 };
 
@@ -58,11 +62,10 @@ const logInWithEmailAndPassword = async (email, password) => {
         await signInWithEmailAndPassword(auth, email, password);
         return "";
     } catch (err) {
-        // console.error(err);
         if (err.message === "Firebase: Error (auth/user-not-found).") {
             return "User not found";
         }
-        else if(err.message === "Firebase: Error (auth/wrong-password)."){
+        else if (err.message === "Firebase: Error (auth/wrong-password).") {
             return "Please check your password";
         }
         else {
@@ -101,7 +104,7 @@ const sendPasswordReset = async (email) => {
         if (err.message === "Firebase: Error (auth/user-not-found).") {
             return "User not found";
         }
-        else if(err.message === "Firebase: Error (auth/invalid-email)."){
+        else if (err.message === "Firebase: Error (auth/invalid-email).") {
             return "Check the Email ID"
         }
         else
@@ -110,7 +113,6 @@ const sendPasswordReset = async (email) => {
 };
 
 const logout = () => {
-    // console.log("User logged out");
     signOut(auth);
 };
 
