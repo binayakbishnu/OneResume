@@ -1,9 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 import NavBar from '../Components/NavBar'
 
+import axios from "axios";
+
 function AuthPage() {
+    const healthCheck = async () => {
+        try {
+            await axios.get(`${process.env.REACT_APP_HEALTHCHECK_URL}`
+            ).then(() => {
+                // console.log(res);
+                console.log('Server health check');
+            }).catch(() => {
+                // console.log(e);
+            }).finally(() => {
+                // console.log('axios completed successfully');
+            });
+        } catch (e) {
+            // console.log(e);
+        }
+    }
+    useEffect(() => {
+        // if (!user) return navigate("/home");
+
+        healthCheck();
+    });
+
     const [active, setActive] = useState("login");
     const toggle = (input) => {
         input === "login" ? setActive("login") : setActive("signup");
