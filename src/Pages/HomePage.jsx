@@ -114,33 +114,15 @@ function HomePage() {
         }
     }
 
+    const [retrieveStatus, setRetrieveStatus] = useState("link loading if exists");
+    const handleRetrieveStatus = async (status) => {
+        setRetrieveStatus(status);
+    }
+
     const [receivedLink, setReceivedLink] = useState("no link");
     const viewFileTrigger = async () => {
-        // await axios.get(`https://oneresume-vd25.onrender.com/`, {
-
-        // }).then((res) => {
-        //     setReceivedLink(res);
-        //     console.log(receivedLink);
-        // })
         if (user) {
-            // console.log(user?.email);
-            /* try {
-                await axios.post(`https://oneresume-vd25.onrender.com/api/getResume`, {
-                    user_id: email,
-                }).then((res) => {
-                    console.log(typeof (res.data));
-                    return res.data;
-                    // return res.
-                }).catch((err) => {
-                    console.log(err);
-                }).finally(() => {
-                    // console.log('axios completed successfully');
-                });
-            } catch (err) {
-                console.log(err);
-            } */
-
-            await receivedByAxios();
+            handleRetrieveStatus("link loading if exists").then(() => receivedByAxios()).then(() => handleRetrieveStatus(""));
         }
     }
 
@@ -229,6 +211,7 @@ function HomePage() {
                     )}
                 </div>
 
+                {retrieveStatus && <p className="p-0 m-0 text-sm flex flex-row items-center gap-2">{retrieveStatus}<Loader className="animate-spin duration-500 infinite linear"/></p>}
                 <div className={
                     `${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                         'text-[rgba(0,0,0,0)] cursor-default' :
@@ -252,7 +235,7 @@ function HomePage() {
                 </div>
 
                 <div className={`${fileSizeExceeded ? 'absolute top-[20%] lg:top-auto bottom-auto lg:bottom-[20%]' : 'hidden'} text-center text-white m-auto h-fit lg:w-fit bg-[#222222] rounded px-6 py-4`}>
-                    Compress your file with <a href="https://tinywow.com/" target="_blank"
+                    Compress your file with <a href="https://tinywow.com/" target="_blank" rel="noreferrer noopener"
                         className={`underline`}>
                         https://tinywow.com</a>
                 </div>
