@@ -148,6 +148,7 @@ function SignupCard() {
             setEmailError("no error");
             return true;
         }
+        //eslint-disable-next-line
         else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             setEmailValid(true);
             setEmailError("no error");
@@ -252,7 +253,7 @@ function SignupCard() {
         validatePassword();
         validateConfirmPassword();
         // validateIdentifier();
-    }, [user, loading, email, password, confirmPassword]);
+    }, [user, loading, error, email, password, confirmPassword]);
 
     return (
         <div className='bg-[#191919] mt-2 lg:mt-5 flex-1 flex flex-col justify-start gap-5 rounded p-5 pb-6 lg:pb-6'>
