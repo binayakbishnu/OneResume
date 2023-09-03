@@ -7,6 +7,7 @@ import {
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     signOut,
+    updateProfile,
 } from "firebase/auth";
 import {
     getFirestore,
@@ -35,16 +36,37 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
     try {
-        const res = await signInWithPopup(auth, googleProvider);
+        let res = "";
+        // let displayName = "";
+        res = await signInWithPopup(auth, googleProvider
+        );/* .then((result) => {
+            res = result;
+            var name = result.user.displayName.split(" ");
+            name = name.map(element => {
+                return element.toLowerCase();
+            });
+            console.log(name);
+            displayName = name.join("");
+            console.log(displayName);
+        }).then(async () => {
+            await updateProfile(auth.currentUser, {
+                displayName: displayName
+            })
+        }); */
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const docs = await getDocs(q);
 
         // if user not found, add it
+        // var name = user.displayName.split(" ");
+        // name = name.map(element => {
+        //     return element.toLowerCase();
+        // });
+        // displayName = name.join("");
         if (docs.docs.length === 0) {
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
-                name: user.displayName,
+                identifier: "",
                 authProvider: "google",
                 email: user.email,
             });
@@ -74,15 +96,22 @@ const logInWithEmailAndPassword = async (email, password) => {
     }
 };
 
-const registerWithEmailAndPassword = async (/* name, */ email, password) => {
+const registerWithEmailAndPassword = async (identifier, email, password) => {
     try {
-        const res = await createUserWithEmailAndPassword(auth, email, password);
+        let res = "";
+        await createUserWithEmailAndPassword(auth, email, password
+        ).then((result) => {
+            res = result;
+            updateProfile(auth.currentUser, {
+                displayName: identifier
+            })
+        });
         const user = res.user;
         await addDoc(collection(db, "users"), {
             uid: user.uid,
-            // name,
+            identifier: identifier,
             authProvider: "local",
-            email,
+            email: email,
         });
         return "";
     } catch (err) {

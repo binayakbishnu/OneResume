@@ -4,13 +4,16 @@ import { /* Link, */ useNavigate } from 'react-router-dom'
 import { AiFillCheckCircle, AiOutlineGoogle } from 'react-icons/ai'
 import { ReactComponent as Loader } from '../../assets/spinner.svg'
 
-import { auth, registerWithEmailAndPassword, signInWithGoogle, } from "../../Authentication/firebase";
+import { auth, registerWithEmailAndPassword, signInWithGoogle, db } from "../../Authentication/firebase";
+import { query, collection, getDocs, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import { BsCheckCircleFill } from 'react-icons/bs';
+
 
 function SignupCard() {
     // const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
@@ -49,12 +52,24 @@ function SignupCard() {
             setConfirmPasswordValid(false);
             setConfirmPasswordError("Enter confirm password");
         }
-        else if (emailValid && passwordValid && confirmPasswordValid) {
-            const submitError = await registerWithEmailAndPassword(/* name,  */email, password);
+        else if (identifier === "") {
+            setIdentifierValid(false);
+            setIdentifierError("Enter id");
+        }
+        else if (identifierValid && emailValid && passwordValid && confirmPasswordValid) {
+            const submitError = await registerWithEmailAndPassword(identifier, email, password);
             // console.warn(submitError);
-            if (submitError !== "") {
+            if (submitError === "") {
+                //
+            }
+            else if (submitError === "Email ID already exists") {
                 setEmailValid(false);
-                setEmailError("Email ID already exists");
+                setEmailError(submitError);
+                return false;
+            }
+            else {
+                console.warn(submitError);
+                return false;
             }
             // else if(submitError !== ""){
             //     setEmailValid(false);
@@ -69,15 +84,60 @@ function SignupCard() {
                 setEmailError("Email ID already exists");
             }
         }
+        else if (!identifierValid) {
+            setIdentifierError("Check identifier validity");
+        }
         else {
-            setConfirmPasswordValid(false);
-            setConfirmPasswordError("Invalid fields");
+            setIdentifierValid(false);
+            setIdentifierError("Invalid fields");
             // alert("Invalid fields");
         }
     }
 
     const signupButtonTrigger = async () => {
         handleSignupBtnState(true).then(() => submitSignup()).then(() => handleSignupBtnState(false));
+    }
+
+    const fetchUserData = async () => {
+        try {
+            const q = query(collection(db, "users"), where("identifier", "==", identifier));
+            const doc = await getDocs(q);
+            const data = doc?.docs[0]?.data();
+            if ((data?.identifier !== undefined) && (data?.identifier !== "")) {
+                setIdentifierValid(false);
+                setIdentifierError("Identifier already taken");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const [identifierValid, setIdentifierValid] = useState(false);
+    const [identifierError, setIdentifierError] = useState("");
+    const validateIdentifier = async () => {
+        if (identifier === "") {
+            setIdentifierValid(false);
+            setIdentifierError("Choose an identifier");
+            return true;
+        }
+        else if (/^[a-zA-Z0-9]{1,10}$/.test(identifier)) {
+            setIdentifierValid(true);
+            setIdentifierError("");
+
+            await fetchUserData();
+
+            return true;
+        }
+        else if (identifier.length > 8) {
+            setIdentifierValid(false);
+            setIdentifierError("max 10 characters");
+            return false;
+        }
+        else {
+            setIdentifierValid(false);
+            setIdentifierError("Only a-z, A-Z, 0-9");
+            return false;
+        }
     }
 
     const [emailValid, setEmailValid] = useState(true);
@@ -191,6 +251,7 @@ function SignupCard() {
         validateEmail();
         validatePassword();
         validateConfirmPassword();
+        // validateIdentifier();
     }, [user, loading, email, password, confirmPassword]);
 
     return (
@@ -224,6 +285,7 @@ function SignupCard() {
                         className='w-[100%] mx-auto px-5 py-2 rounded bg-[rgba(0,0,0,0)] border boder-white text-gray-500'
                     />
                 </div> */}
+
                 <div className='relative'>
                     <label htmlFor="" className='absolute top-[-0.8rem] left-[1rem] z-1 text-white py-0 px-[5px] bg-[#191919]'>
                         Email
@@ -285,6 +347,29 @@ function SignupCard() {
                         <AiFillCheckCircle className={`${confirmPasswordValid ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
                     <p className={`p-0 m-0 text-[0.8em] ${confirmPasswordValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{confirmPasswordError}</p>
+                </div>
+
+                <div className='relative'>
+                    <label htmlFor="" className='absolute top-[-0.8rem] left-[1rem] z-1 text-white py-0 px-[5px] bg-[#191919]'>
+                        Unique ID
+                    </label>
+                    <div className='flex flex-row items-center justify-between rounded border border-white pe-2'>
+                        <input type="text"
+                            placeholder='myidentifier'
+                            onFocus={(e) => e.target.placeholder = ""}
+                            onBlur={(e) => e.target.placeholder = "myidentifier"}
+                            value={identifier}
+                            onChange={(e) => setIdentifier(e.target.value)}
+                            className='w-[100%] mx-auto px-5 pe-1 py-2 bg-[rgba(0,0,0,0)] text-gray-500 border-none outline-none'
+                        />
+                        {/* <BsCheckCircleFill className={`${identifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
+                        {/* <AiFillCheckCircle className={`${identifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
+                        <span className={`hover:cursor-pointer hover:underline ${identifierValid ? 'text-green-500' : 'text-red-500'}`}
+                            onClick={validateIdentifier}>
+                            Check
+                        </span>
+                    </div>
+                    <p className={`p-0 m-0 text-[0.8em] ${identifierValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{identifierError}</p>
                 </div>
 
                 {/* <div className='flex flex-row gap-2'>

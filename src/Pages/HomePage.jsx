@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 
-import { auth, /* db */ } from "../Authentication/firebase";
-// import { query, collection, getDocs, where } from "firebase/firestore";
+import { auth, db } from "../Authentication/firebase";
+import { query, collection, getDocs, where, doc, updateDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { GoCopy } from "react-icons/go";
@@ -17,20 +17,100 @@ function HomePage() {
     const [miscErrorMessage, setMiscErrorMessage] = useState("");
 
     // const [name, setName] = useState("");
-    // const [email, setEmail] = useState(user?.email);
-    /* const fetchUserData = async () => {
+    // const [email, setEmail] = useState(null);
+    const [identifier, setIdentifier] = useState(null);
+    const fetchUserData = async () => {
         console.log('fetching user data...');
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            const doc = await getDocs(q);
-            const data = doc?.docs[0]?.data();
-            // setName(data.name);
+            const docSnap = await getDocs(q);
+            const data = docSnap?.docs[0]?.data();
             // setEmail(data?.email);
+            setIdentifier(data?.identifier);
+            return data?.identifier;
         } catch (err) {
             console.error(err);
-            alert("An error occured while fetching user data");
+            // alert("An error occured while fetching user data");
         }
-    }; */
+    };
+
+    //! identifier related methods
+    const fetchUserData2 = async () => {
+        try {
+            const q = query(collection(db, "users"), where("identifier", "==", newIdentifier));
+            const docSnap = await getDocs(q);
+            const data = docSnap?.docs[0]?.data();
+            if ((data?.identifier !== undefined)) {
+                setNewIdentifierValid(false);
+                setNewIdentifierError("Identifier already taken");
+                return "taken";
+            }
+            return "allOK";
+        } catch (err) {
+            console.error(err);
+            return err.message;
+            // alert("An error occured while fetching user data");
+        }
+    };
+    const updateRecords = async () => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+            const docSnap = await getDocs(q);
+            const data = docSnap?.docs[0]?.data();
+            const docID = docSnap?.docs[0]?.id;
+            const docRef = doc(db, "users", docID);
+
+            await updateDoc(docRef, {
+                uid: data?.uid,
+                identifier: newIdentifier,
+                authProvider: data?.authProvider,
+                email: data?.email,
+            })
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+    const [newIdentifier, setNewIdentifier] = useState("");
+    const [newIdentifierValid, setNewIdentifierValid] = useState(false);
+    const [newIdentifierError, setNewIdentifierError] = useState("");
+    const validateIdentifier = async () => {
+        if (newIdentifier === "") {
+            setNewIdentifierValid(false);
+            setNewIdentifierError("Choose an identifier");
+            return true;
+        }
+        else if (/^[a-zA-Z0-9]{1,10}$/.test(newIdentifier)) {
+            setNewIdentifierValid(true);
+            setNewIdentifierError("");
+
+            await fetchUserData2(
+            ).then((response) => {
+                if (response === "allOK") {
+                    console.log("allOK");
+                    handleUploadButtonState(true)
+                        .then(() => updateRecords()
+                        ).then(() => handleUploadButtonState(false)
+                        ).then(() => setIdentifier(newIdentifier));
+                }
+                else if (response === "taken") return;
+                else console.log(response);
+            });
+
+            return true;
+        }
+        else if (newIdentifier.length > 8) {
+            setNewIdentifierValid(false);
+            setNewIdentifierError("max 10 characters");
+            return false;
+        }
+        else {
+            setNewIdentifierValid(false);
+            setNewIdentifierError("Only a-z, A-Z, 0-9");
+            return false;
+        }
+    }
+    //! identifier related methods ends 
 
     const fileUploadRef = useRef(null);
     const uploadButtonTrigger = () => {
@@ -87,8 +167,8 @@ function HomePage() {
 
     const sendByAxios = async (file_) => {
         const formData = new FormData();
-        // formData.append('user_id', uid);
-        formData.append('user_id', user?.email);
+        // formData.append('user_id', user?.email);
+        formData.append('user_id', identifier);
         formData.append('fileData', file_);
 
         try {
@@ -129,7 +209,8 @@ function HomePage() {
     const receivedByAxios = async () => {
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/getResume`, {
-                user_id: user?.email,
+                // user_id: user?.email,
+                user_id: identifier
             }).then((res) => {
                 setReceivedLink(res.data);
             }).catch((e) => {
@@ -154,6 +235,9 @@ function HomePage() {
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
+
+        fetchUserData();
+        // handleNoIdentifier();
 
         viewFileTrigger();
     }, [user, loading]);
@@ -211,7 +295,29 @@ function HomePage() {
                     )}
                 </div>
 
-                {retrieveStatus && <p className="p-0 m-0 text-sm flex flex-row items-center gap-2">{retrieveStatus}<Loader className="animate-spin duration-500 infinite linear"/></p>}
+                {!identifier &&
+                    <div>
+                        <div className='flex flex-row items-center justify-between rounded border border-white pe-2'>
+                            <input type="text" placeholder="myidentifier"
+                                onFocus={(e) => e.target.placeholder = ""}
+                                onBlur={(e) => e.target.placeholder = "myidentifier"}
+                                value={newIdentifier}
+                                onChange={(e) => setNewIdentifier(e.target.value)}
+                                className="mx-auto px-5 pe-1 py-2 bg-[rgba(0,0,0,0)] text-gray-500 rounded border-none outline-none"
+                            />
+                            {/* <BsCheckCircleFill className={`${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
+                            {/* <AiFillCheckCircle className={`${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
+                            <span className={`hover:cursor-pointer hover:underline ${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`}
+                                onClick={validateIdentifier}>
+                                Check
+                            </span>
+                        </div>
+                        <p className={`p-0 m-0 text-[0.8em] ${newIdentifierValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{newIdentifierError}</p>
+                    </div>
+                }
+                {identifier && <p>Identifier set as: {identifier}</p>}
+
+                {retrieveStatus && <p className="p-0 m-0 text-sm flex flex-row items-center gap-2">{retrieveStatus}<Loader className="animate-spin duration-500 infinite linear" /></p>}
                 <div className={
                     `${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                         'text-[rgba(0,0,0,0)] cursor-default' :
