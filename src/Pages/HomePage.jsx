@@ -19,6 +19,9 @@ function HomePage() {
     // const [name, setName] = useState("");
     // const [email, setEmail] = useState(null);
     const [identifier, setIdentifier] = useState(null);
+
+
+    //! identifier related methods
     const fetchUserData = async () => {
         console.log('fetching user data...');
         try {
@@ -26,15 +29,18 @@ function HomePage() {
             const docSnap = await getDocs(q);
             const data = docSnap?.docs[0]?.data();
             // setEmail(data?.email);
-            setIdentifier(data?.identifier);
+            // setIdentifier(data?.identifier);
             return data?.identifier;
         } catch (err) {
             console.error(err);
+            return err.message;
             // alert("An error occured while fetching user data");
         }
     };
-
-    //! identifier related methods
+    const putIdentifier = async (val) => {
+        setIdentifier(val);
+        return val;
+    }
     const fetchUserData2 = async () => {
         try {
             const q = query(collection(db, "users"), where("identifier", "==", newIdentifier));
@@ -200,17 +206,17 @@ function HomePage() {
     }
 
     const [receivedLink, setReceivedLink] = useState("no link");
-    const viewFileTrigger = async () => {
+    const viewFileTrigger = async (val = "") => {
         if (user) {
-            handleRetrieveStatus("link loading if exists").then(() => receivedByAxios()).then(() => handleRetrieveStatus(""));
+            handleRetrieveStatus("link loading if exists").then(() => receivedByAxios(val || identifier)).then(() => handleRetrieveStatus(""));
         }
     }
 
-    const receivedByAxios = async () => {
+    const receivedByAxios = async (val) => {
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/getResume`, {
                 // user_id: user?.email,
-                user_id: identifier
+                user_id: val
             }).then((res) => {
                 setReceivedLink(res.data);
             }).catch((e) => {
@@ -236,10 +242,10 @@ function HomePage() {
         if (loading) return;
         if (!user) return navigate("/");
 
-        fetchUserData();
+        fetchUserData().then((response) => putIdentifier(response)).then((response) => viewFileTrigger(response));
         // handleNoIdentifier();
 
-        viewFileTrigger();
+        // viewFileTrigger();
     }, [user, loading]);
 
     return (
