@@ -1,31 +1,30 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
-    ArrowPathIcon,
+    // ArrowPathIcon,
     Bars3Icon,
-    ChartPieIcon,
-    CursorArrowRaysIcon,
-    FingerPrintIcon,
-    SquaresPlusIcon,
+    // ChartPieIcon,
+    // CursorArrowRaysIcon,
+    // FingerPrintIcon,
+    // SquaresPlusIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import { BsFillPersonFill } from 'react-icons/bs'
-// import { BiTargetLock } from 'react-icons/bi'
 import logo from '../assets/logo.png'
 
-import { LoginLink, LogoutLink, SignupLink } from './Auth/CommonLinks'
+import { LoginLink, LogoutLink } from './Auth/CommonLinks'
 
-const aboutDetails = [
+/* const aboutDetails = [
     { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
     { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
     { name: 'Security', description: 'Your customersp data will be safe and secure', href: '#', icon: FingerPrintIcon },
     { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
     { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
+] */
 const callsToAction = [
-    { name: 'Watch demo', href: '/about/demo', icon: PlayCircleIcon },
-    { name: 'Contact us', href: '/about#contact', icon: PhoneIcon },
+    { name: 'Watch demo', href: '', icon: PlayCircleIcon },
+    { name: 'Contact us', href: '/home/about', icon: PhoneIcon },
 ]
 
 function classNames(...classes) {
@@ -39,7 +38,7 @@ export default function NavBar({ type, email }) {
         <header className="bg-none text-white">
             <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
-                    <a href={type == "loggedin" ? "/home" : "/"} className="-m-1.5 p-1.5">
+                    <a href={type === "loggedin" ? "/home" : "/"} className="-m-1.5 p-1.5">
                         <span className="sr-only">OneResume</span>
                         <img className="h-8 w-auto" src={logo} alt="" />
                     </a>
@@ -55,7 +54,7 @@ export default function NavBar({ type, email }) {
                     </button>
                 </div>
                 <Popover.Group className="hidden lg:flex lg:gap-x-12">
-                    <a href={type == "loggedin" ? "/home" : "/"} className="text-sm font-semibold leading-6">
+                    <a href={type === "loggedin" ? "/home" : "/"} className="text-sm font-semibold leading-6">
                         Home
                     </a>
 
@@ -83,12 +82,14 @@ export default function NavBar({ type, email }) {
                                             <BiTargetLock className="h-6 w-6 text-gray-600" aria-hidden="true" />
                                         </div> */}
                                         <div className="flex-auto">
-                                            <a href="/about" className="block font-semibold">
+                                            <a href="/home/about" className="block font-semibold">
                                                 Aim
                                                 <span className="absolute inset-0" />
                                             </a>
                                             <p className="mt-1 text-gray-600">
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quod iste qui repudiandae soluta vero, vitae culpa blanditiis tempore perferendis nam fugit similique recusandae fuga earum debitis. A, similique sapiente.
+                                                Users can upload updated resumes without having to generate new links or create copies.
+                                                Removes the risk of the old link breaking, the same link shows the new file.
+                                                Built with ReactJs, Nodejs, and Firebase for authentication and storage.
                                             </p>
                                         </div>
                                     </div>
@@ -163,7 +164,7 @@ export default function NavBar({ type, email }) {
                                                 <BsFillPersonFill className="h-6 w-6 text-gray-600" aria-hidden="true" />
                                             </div>
                                             <div className="flex-auto">
-                                                <a href={type == "loggedin" ? "/home/profile" : "/"} className="block font-semibold">
+                                                <a href={type === "loggedin" ? "/home/profile" : "/"} className="block font-semibold">
                                                     Profile
                                                     <span className="absolute inset-0" />
                                                 </a>
@@ -173,6 +174,7 @@ export default function NavBar({ type, email }) {
                                     </div>
 
                                     <div className="grid grid-cols-1 divide-x divide-gray-900/5 bg-[#202020]">
+                                        {/* eslint-disable-next-line */}
                                         <LogoutLink style="rounded-es-3xl flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 hover:bg-[#222222]" />
                                     </div>
                                 </Popover.Panel>
@@ -184,6 +186,7 @@ export default function NavBar({ type, email }) {
                 {
                     type === "loggedout" &&
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end text-[rgba(0,0,0,0)]">
+                        {/* eslint-disable-next-line */}
                         <LoginLink style="text-sm font-semibold leading-6" />
                     </div>
                 }
@@ -193,7 +196,7 @@ export default function NavBar({ type, email }) {
                 <Dialog.Panel
                     className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-[#191919] text-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
-                        <a href={type == "loggedin" ? "/home" : "/"} className="-m-1.5 p-1.5">
+                        <a href={type === "loggedin" ? "/home" : "/"} className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
@@ -207,14 +210,14 @@ export default function NavBar({ type, email }) {
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             <span className="sr-only">Close menu</span>
-                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                         </button>
                     </div>
                     <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 <a
-                                    href={type == "loggedin" ? "/home" : "/"}
+                                    href={type === "loggedin" ? "/home" : "/"}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                 >
                                     Home
@@ -232,7 +235,7 @@ export default function NavBar({ type, email }) {
                                             <Disclosure.Panel className="mt-2 space-y-2">
                                                 <Disclosure.Button
                                                     as="a"
-                                                    href="/about"
+                                                    href="/home/about"
                                                     className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7"
                                                 >
                                                     Aim
@@ -272,7 +275,7 @@ export default function NavBar({ type, email }) {
                                 {
                                     type === "loggedin" &&
                                     <a
-                                        href={type == "loggedin" ? "/home/profile" : "/"}
+                                        href={type === "loggedin" ? "/home/profile" : "/"}
                                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
                                     >
                                         Profile
@@ -282,12 +285,14 @@ export default function NavBar({ type, email }) {
                             {
                                 type === "loggedin" &&
                                 <div className="py-6">
+                                    {/* eslint-disable-next-line */}
                                     <LogoutLink style="w-full bg-[#202020] block rounded-lg px-3 py-2.5 text-base font-semibold leading-7" />
                                 </div>
                             }
                             {
                                 type === "loggedout" &&
                                 <div className="py-6">
+                                    {/* eslint-disable-next-line */}
                                     <LoginLink style="w-full bg-[#202020] block rounded-lg px-3 py-2.5 text-base font-semibold leading-7" />
                                 </div>
                             }
