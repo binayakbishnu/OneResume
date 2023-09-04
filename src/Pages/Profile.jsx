@@ -34,7 +34,7 @@ function Profile() {
             {/* <NavBar /> */}
             {/* {user?.uid} */}
             <div className='bg-[#191919] w-[80%] md:w-[70%] lg:w-[50%] mx-auto mt-[5%] rounded p-5'>
-                <h3 className='text-3xl'>User details</h3>
+                <h3 className='text-2xl md:text-3xl'>User details</h3>
                 <hr />
                 <p className='mt-5'>
                     Email: <span className='hidden md:inline'>{user?.email}</span>
