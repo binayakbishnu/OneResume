@@ -12,9 +12,9 @@ import LoginPage from './Components/Auth/LoginCard'
 import SignupPage from './Components/Auth/SignupCard'
 import PwdReset from './Components/Auth/PwdReset'
 import HomePage from './Pages/HomePage'
-// import Profile from './Pages/Profile'
 import Wrapper from './Pages/Wrapper';
 const Profile = React.lazy(() => import('./Pages/Profile'));
+const About = React.lazy(() => import('./Pages/About'));
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
           </Route>
           <Route path="/home" element={<Wrapper />}>
             <Route path="" element={<HomePage />} />
+            <Route path="about" element={<Suspense><About /></Suspense>} />
             <Route path="profile" element={<Suspense><Profile /></Suspense>} />
           </Route>
         </Routes>
