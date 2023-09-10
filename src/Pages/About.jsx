@@ -10,11 +10,16 @@ import { BsGithub, BsGlobe2, BsLinkedin, BsMedium } from 'react-icons/bs';
 
 function About() {
     const [user, loading, /* error */] = useAuthState(auth);
-    const [loggedInState, setLoggedInState] = useState(false)
+    const [loggedInState, setLoggedInState] = useState(false);
+
+    const setNavbar = (state) => {
+        // console.log('setNavbar()');
+        setLoggedInState(state);
+    }
 
     useEffect(() => {
         if (loading) return;
-        if (user) setLoggedInState(true);
+        if (user) setNavbar(true);
     },);
     return (
         <>
