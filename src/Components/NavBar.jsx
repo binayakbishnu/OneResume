@@ -24,7 +24,7 @@ import { LoginLink, LogoutLink } from './Auth/CommonLinks'
 ] */
 const callsToAction = [
     { name: 'Watch demo', href: '', icon: PlayCircleIcon },
-    { name: 'Contact us', href: '/home/about', icon: PhoneIcon },
+    { name: 'Contact us', href: '/about', icon: PhoneIcon },
 ]
 
 function classNames(...classes) {
@@ -82,7 +82,7 @@ export default function NavBar({ type, email }) {
                                             <BiTargetLock className="h-6 w-6 text-gray-600" aria-hidden="true" />
                                         </div> */}
                                         <div className="flex-auto">
-                                            <a href="/home/about" className="block font-semibold">
+                                            <a href="/about" className="block font-semibold">
                                                 Aim
                                                 <span className="absolute inset-0" />
                                             </a>
@@ -235,7 +235,7 @@ export default function NavBar({ type, email }) {
                                             <Disclosure.Panel className="mt-2 space-y-2">
                                                 <Disclosure.Button
                                                     as="a"
-                                                    href="/home/about"
+                                                    href="/about"
                                                     className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7"
                                                 >
                                                     Aim

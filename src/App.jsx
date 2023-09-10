@@ -30,9 +30,9 @@ function App() {
           </Route>
           <Route path="/home" element={<Wrapper />}>
             <Route path="" element={<HomePage />} />
-            <Route path="about" element={<Suspense><About /></Suspense>} />
             <Route path="profile" element={<Suspense><Profile /></Suspense>} />
           </Route>
+            <Route path="/about" element={<Suspense><About /></Suspense>} />
         </Routes>
       </Router>
     </div>
