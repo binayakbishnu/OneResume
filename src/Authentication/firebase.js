@@ -112,6 +112,7 @@ const registerWithEmailAndPassword = async (identifier, email, password) => {
             identifier: identifier,
             authProvider: "local",
             email: email,
+            link: `https://oneresume-vd25.onrender.com/api/cv/${identifier}`
         });
         return "";
     } catch (err) {

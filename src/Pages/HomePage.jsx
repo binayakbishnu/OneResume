@@ -71,6 +71,7 @@ function HomePage() {
                 identifier: newIdentifier,
                 authProvider: data?.authProvider,
                 email: data?.email,
+                link: `${process.env.REACT_APP_LINK}/${newIdentifier}`
             })
         }
         catch (e) {
@@ -97,7 +98,8 @@ function HomePage() {
                     handleUploadButtonState(true)
                         .then(() => updateRecords()
                         ).then(() => handleUploadButtonState(false)
-                        ).then(() => setIdentifier(newIdentifier));
+                        ).then(() => setIdentifier(newIdentifier)
+                        ).then(()=>viewFileTrigger(newIdentifier));
                 }
                 else if (response === "taken") return;
                 else console.log(response);
@@ -155,7 +157,7 @@ function HomePage() {
 
         handleUploadButtonState(true
         ).then(() => sendByAxios(e.target?.files[0])
-        ).then(() => viewFileTrigger()
+            /* ).then(() => viewFileTrigger() */
         ).then(() => handleUploadButtonState(false)
         ).then(() => setTimeout(() => { setMiscErrorMessage(""); }, 1000)
         );
@@ -180,7 +182,7 @@ function HomePage() {
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/uploadResume`, formData).then(res => {
                 // console.log(res);
-                setReceivedLink(null);
+                // setReceivedLink(null);
                 // setTimeout(() => {
                 //     window.location.reload(false);
                 //     // console.log('This will run after 1 second!')
@@ -205,10 +207,20 @@ function HomePage() {
         setRetrieveStatus(status);
     }
 
+    const displayLink = async (val) => {
+        setReceivedLink(`${process.env.REACT_APP_LINK}/${val}`);
+    }
+
     const [receivedLink, setReceivedLink] = useState("no link");
     const viewFileTrigger = async (val = "") => {
         if (user) {
-            handleRetrieveStatus("link loading if exists").then(() => receivedByAxios(val || identifier)).then(() => handleRetrieveStatus(""));
+            if (val !== "") {
+                handleRetrieveStatus("link loading if exists").then(() => displayLink(val)).then(() => handleRetrieveStatus(""));
+            }
+            else{
+                handleRetrieveStatus("");
+            }
+            // handleRetrieveStatus("link loading if exists").then(() => receivedByAxios(val || identifier)).then(() => handleRetrieveStatus(""));
         }
     }
 
@@ -242,7 +254,8 @@ function HomePage() {
         if (loading) return;
         if (!user) return navigate("/");
 
-        fetchUserData().then((response) => putIdentifier(response)).then((response) => viewFileTrigger(response));
+        fetchUserData().then((response) => putIdentifier(response))
+            .then((response) => viewFileTrigger(response));
         // handleNoIdentifier();
 
         // viewFileTrigger();
