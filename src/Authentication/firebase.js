@@ -58,11 +58,6 @@ const signInWithGoogle = async () => {
         const docs = await getDocs(q);
 
         // if user not found, add it
-        // var name = user.displayName.split(" ");
-        // name = name.map(element => {
-        //     return element.toLowerCase();
-        // });
-        // displayName = name.join("");
         if (docs.docs.length === 0) {
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
@@ -113,6 +108,9 @@ const registerWithEmailAndPassword = async (identifier, email, password) => {
             authProvider: "local",
             email: email,
             link: `https://oneresume-vd25.onrender.com/api/cv/${identifier}`
+        });
+        await addDoc(collection(db, "identifiers"), {
+            value: identifier,
         });
         return "";
     } catch (err) {

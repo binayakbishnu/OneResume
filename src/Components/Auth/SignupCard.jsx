@@ -100,10 +100,13 @@ function SignupCard() {
 
     const fetchUserData = async () => {
         try {
-            const q = query(collection(db, "users"), where("identifier", "==", identifier));
-            const doc = await getDocs(q);
-            const data = doc?.docs[0]?.data();
-            if ((data?.identifier !== undefined) && (data?.identifier !== "")) {
+            const q = query(collection(db, "identifiers"), where("value", "==", identifier));
+            const docs = await getDocs(q);
+            // console.log(docs.docs.length);
+            // const data = docs?.docs[0]?.data();
+            // console.log(data)
+            // if ((data?.identifier !== undefined) && (data?.identifier !== "")) {
+                if(docs?.docs?.length !== 0){
                 setIdentifierValid(false);
                 setIdentifierError("Identifier already taken");
             }

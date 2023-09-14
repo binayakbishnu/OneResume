@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 
 import { auth, db } from "../Authentication/firebase";
-import { query, collection, getDocs, where, doc, updateDoc } from "firebase/firestore";
+import { query, collection, getDocs, where, doc, updateDoc, setDoc, addDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { GoCopy } from "react-icons/go";
@@ -26,8 +26,8 @@ function HomePage() {
         console.log('fetching user data...');
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            const docSnap = await getDocs(q);
-            const data = docSnap?.docs[0]?.data();
+            const docs = await getDocs(q);
+            const data = docs?.docs[0]?.data();
             // setEmail(data?.email);
             // setIdentifier(data?.identifier);
             return data?.identifier;
@@ -43,10 +43,11 @@ function HomePage() {
     }
     const fetchUserData2 = async () => {
         try {
-            const q = query(collection(db, "users"), where("identifier", "==", newIdentifier));
-            const docSnap = await getDocs(q);
-            const data = docSnap?.docs[0]?.data();
-            if ((data?.identifier !== undefined)) {
+            const q = query(collection(db, "identifiers"), where("value", "==", newIdentifier));
+            const docs = await getDocs(q);
+            const data = docs?.docs[0]?.data();
+            // if ((data?.identifier !== undefined)) {
+            if (docs?.docs?.length !== 0) {
                 setNewIdentifierValid(false);
                 setNewIdentifierError("Identifier already taken");
                 return "taken";
@@ -61,9 +62,9 @@ function HomePage() {
     const updateRecords = async () => {
         try {
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            const docSnap = await getDocs(q);
-            const data = docSnap?.docs[0]?.data();
-            const docID = docSnap?.docs[0]?.id;
+            const docs = await getDocs(q);
+            const data = docs?.docs[0]?.data();
+            const docID = docs?.docs[0]?.id;
             const docRef = doc(db, "users", docID);
 
             await updateDoc(docRef, {
@@ -72,7 +73,20 @@ function HomePage() {
                 authProvider: data?.authProvider,
                 email: data?.email,
                 link: `${process.env.REACT_APP_LINK}/${newIdentifier}`
-            })
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+        try {
+            // const docRef2 = doc(db, "identifiers", newIdentifier);
+            // await setDoc(docRef2, {
+            //     value: newIdentifier,
+            // });
+            await addDoc(collection(db, "identifiers"), {
+                value: newIdentifier,
+            });
         }
         catch (e) {
             console.log(e);
@@ -99,7 +113,7 @@ function HomePage() {
                         .then(() => updateRecords()
                         ).then(() => handleUploadButtonState(false)
                         ).then(() => setIdentifier(newIdentifier)
-                        ).then(()=>viewFileTrigger(newIdentifier));
+                        ).then(() => viewFileTrigger(newIdentifier));
                 }
                 else if (response === "taken") return;
                 else console.log(response);
@@ -217,7 +231,7 @@ function HomePage() {
             if (val !== "") {
                 handleRetrieveStatus("link loading if exists").then(() => displayLink(val)).then(() => handleRetrieveStatus(""));
             }
-            else{
+            else {
                 handleRetrieveStatus("");
             }
             // handleRetrieveStatus("link loading if exists").then(() => receivedByAxios(val || identifier)).then(() => handleRetrieveStatus(""));
