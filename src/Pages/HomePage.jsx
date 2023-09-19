@@ -300,7 +300,29 @@ function HomePage() {
                     </label>
                 </div> */}
 
+                {!identifier &&
+                    <div>
+                        <div className='flex flex-row items-center justify-between rounded border border-white pe-2'>
+                            <input type="text" placeholder="myidentifier"
+                                onFocus={(e) => e.target.placeholder = ""}
+                                onBlur={(e) => e.target.placeholder = "myidentifier"}
+                                value={newIdentifier}
+                                onChange={(e) => setNewIdentifier(e.target.value)}
+                                className="mx-auto px-5 pe-1 py-2 bg-[rgba(0,0,0,0)] text-gray-500 rounded border-none outline-none"
+                            />
+                            <span className={`hover:cursor-pointer hover:underline ${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`}
+                                onClick={validateIdentifier}>
+                                Check
+                            </span>
+                        </div>
+                        <p className={`p-0 m-0 text-[0.8em] ${newIdentifierValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{newIdentifierError}</p>
+                    </div>
+                }
+
                 <div className="py-5 flex flex-col items-center justify-between w-[60%] md:w-full">
+
+                    <p className="text-red-500 text-center">Make sure the identifier is assigned before you upload</p>
+
                     <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]
                     flex flex-row justify-center items-center h-[80px]`}
                         onClick={uploadButtonTrigger}
@@ -314,13 +336,17 @@ function HomePage() {
                             :
                             'Upload resume'}
                     </button>
+
                     <p className="text-white text-sm">.pdf only | max 200KB</p>
+
                     <p className={`p-0 m-0 ${miscError ? 'text-red-500' : 'text-green-500'}`}>{miscErrorMessage}</p>
+
                     {fileSizeExceeded && (
                         <p className='text-sm text-red-500'>
                             File size exceeded the limit of {(maxFileSize - 1) / 1000}KB (your file: {fileSize / 1000}KB)
                         </p>
                     )}
+
                     {fileTypeWrong && (
                         <p className='text-red-500'>
                             Only .pdf allowed
@@ -328,7 +354,7 @@ function HomePage() {
                     )}
                 </div>
 
-                {!identifier &&
+                {/* {!identifier &&
                     <div>
                         <div className='flex flex-row items-center justify-between rounded border border-white pe-2'>
                             <input type="text" placeholder="myidentifier"
@@ -338,8 +364,6 @@ function HomePage() {
                                 onChange={(e) => setNewIdentifier(e.target.value)}
                                 className="mx-auto px-5 pe-1 py-2 bg-[rgba(0,0,0,0)] text-gray-500 rounded border-none outline-none"
                             />
-                            {/* <BsCheckCircleFill className={`${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
-                            {/* <AiFillCheckCircle className={`${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`} /> */}
                             <span className={`hover:cursor-pointer hover:underline ${newIdentifierValid ? 'text-green-500' : 'text-red-500'}`}
                                 onClick={validateIdentifier}>
                                 Check
@@ -347,7 +371,7 @@ function HomePage() {
                         </div>
                         <p className={`p-0 m-0 text-[0.8em] ${newIdentifierValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{newIdentifierError}</p>
                     </div>
-                }
+                } */}
                 {identifier && <p>Identifier set as: {identifier}</p>}
 
                 {retrieveStatus && <p className="p-0 m-0 text-sm flex flex-row items-center gap-2">{retrieveStatus}<Loader className="animate-spin duration-500 infinite linear" /></p>}
