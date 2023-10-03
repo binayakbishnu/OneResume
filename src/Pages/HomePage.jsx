@@ -323,18 +323,10 @@ function HomePage() {
 
                     <p className="text-red-500 text-center">Make sure the identifier is assigned before you upload</p>
 
-                    <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-4 py-6 w-full md:w-[30%] lg:w-[25%]
-                    flex flex-row justify-center items-center h-[80px]`}
+                    <button className={`bg-[#191919] ${uploadLoading ? '' : 'lg:hover:bg-[#202020]'} rounded p-10 py-6 w-fit flex flex-row justify-center items-center h-[80px]`}
                         onClick={uploadButtonTrigger}
                         disabled={uploadLoading ? true : false}
-                    >
-                        {uploadLoading ?
-                            // <span clasName="h=[100px]">••••••••</span>
-                            <Loader
-                                className="animate-spin duration-500 infinite linear"
-                            />
-                            :
-                            'Upload resume'}
+                    >{uploadLoading ? <Loader className="animate-spin duration-500 infinite linear" /> : 'Upload resume'}
                     </button>
 
                     <p className="text-white text-sm">.pdf only | max 200KB</p>
@@ -352,6 +344,7 @@ function HomePage() {
                             Only .pdf allowed
                         </p>
                     )}
+
                 </div>
 
                 {/* {!identifier &&
@@ -370,7 +363,7 @@ function HomePage() {
                             </span>
                         </div>
                         <p className={`p-0 m-0 text-[0.8em] ${newIdentifierValid ? 'text-[rgba(0,0,0,0)]' : 'text-red-500'}`}>{newIdentifierError}</p>
-                    </div>
+                        </div>
                 } */}
                 {identifier && <p>Identifier set as: {identifier}</p>}
 
@@ -378,7 +371,7 @@ function HomePage() {
                 <div className={
                     `${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
                         'text-[rgba(0,0,0,0)] cursor-default' :
-                        'text-white'} m-0 text-center w-[80%] lg:w-full`}>
+                        'text-white'} m-0 text-center w-[80%] sm:w-[55%] md:w-fit`}>
                     <p id="linkToCopy" className={
                         ` mb-1 flex flex-row items-stretch justify-between gap-2 text-center text-xs m-auto
                         ${receivedLink === "no link" || receivedLink === "" || receivedLink === undefined || receivedLink === null ?
@@ -402,6 +395,11 @@ function HomePage() {
                         className={`underline`}>
                         https://tinywow.com</a>
                 </div>
+
+                <p className="text-green-500 text-center italic w-full px-5 md:px-0 m-0 lg:w-[60%] text-[0.8em] md:text-[1.0em]">
+                    This website is hosted on a free backend server, hence we request you to wait for two minutes when using after a long period of time.<br />
+                    Thank you :&#41;
+                </p>
             </div>
         </div>
     )
